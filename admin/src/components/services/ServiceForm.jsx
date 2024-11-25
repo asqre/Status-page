@@ -30,7 +30,7 @@ const ServiceForm = ({ service, onClose }) => {
         >
           Status
         </label>
-        <div className="flex gap-5">
+        <div className="flex flex-wrap gap-5">
           {statuses.map((status, index) => (
             <StatusChips
               key={index}

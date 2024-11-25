@@ -83,7 +83,7 @@ const Services = () => {
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-          <DialogContent className="w-auto max-w-9xl h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
+          <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {currentService ? "Edit Service" : "Add Service"}
