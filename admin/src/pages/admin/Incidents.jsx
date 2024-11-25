@@ -1,11 +1,8 @@
-import React from 'react'
+import Layout from "@/components/layout/Layout";
+import React from "react";
 
 const Incidents = () => {
-  return (
-    <div>
-      Incidents
-    </div>
-  )
-}
+  return <Layout>Incidents</Layout>;
+};
 
-export default Incidents
+export default Incidents;

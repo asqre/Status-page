@@ -1,17 +1,38 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { SignedIn } from "@clerk/clerk-react";
 import HomePage from "@/pages/HomePage";
-import Layout from "./components/layout/Layout";
+import Dashboard from "./pages/admin/Dashboard";
+import { Route, Routes } from "react-router-dom";
+import Services from "./pages/admin/Services";
+import Incidents from "./pages/admin/Incidents";
+import Profile from "./pages/admin/Profile";
+import Setting from "./pages/admin/Setting";
 
 export default function App() {
   return (
     <header>
-      <SignedOut>
-        <HomePage />
-      </SignedOut>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+
       <SignedIn>
-        <Layout />
-        {/* <UserButton /> */}
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/incidents" element={<Incidents />} />
+          <Route path="/settings" element={<Setting />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
       </SignedIn>
     </header>
+
+    // <header>
+    //   <SignedOut>
+    //     <HomePage />
+    //   </SignedOut>
+    //   <SignedIn>
+    //     <Layout />
+    //     {/* <UserButton /> */}
+    //   </SignedIn>
+    // </header>
   );
 }

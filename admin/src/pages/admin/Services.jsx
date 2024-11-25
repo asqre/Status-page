@@ -1,11 +1,8 @@
-import React from 'react'
+import Layout from "@/components/layout/Layout";
+import React from "react";
 
 const Services = () => {
-  return (
-    <div>
-      Services
-    </div>
-  )
-}
+  return <Layout>Services</Layout>;
+};
 
-export default Services
+export default Services;
