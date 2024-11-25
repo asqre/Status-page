@@ -90,3 +90,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Required Input Field */
+.required-input::after {
+  content: " *";
+  color: red;
+}
