@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="w-full h-[90%]">
         <SidebarTrigger />
         {children}
       </main>
