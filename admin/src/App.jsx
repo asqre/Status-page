@@ -1,9 +1,6 @@
-import {
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import HomePage from "@/pages/HomePage";
+import Layout from "./components/layout/Layout";
 
 export default function App() {
   return (
@@ -12,7 +9,8 @@ export default function App() {
         <HomePage />
       </SignedOut>
       <SignedIn>
-        <UserButton />
+        <Layout />
+        {/* <UserButton /> */}
       </SignedIn>
     </header>
   );
