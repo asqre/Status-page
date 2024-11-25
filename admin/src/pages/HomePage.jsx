@@ -24,7 +24,7 @@ const HomePage = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/" className="text-xl font-bold text-gray-900">
-                Your Logo
+                Status Page
               </Link>
             </div>
             <div className="flex items-center gap-4">
@@ -50,10 +50,11 @@ const HomePage = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Welcome to Our Platform
+            A better way to monitor your services.
           </h1>
           <p className="text-gray-600 mb-8">
-            Please sign in to access your dashboard
+            Monitor your API and website globally, identify performance issues,
+            downtime and receive alerts before your users are affected.
           </p>
           <SignUpButton mode="modal">
             <Button>Get Started</Button>
