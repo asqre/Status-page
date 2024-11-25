@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import ServiceForm from "@/components/services/ServiceForm";
+import Chip from "@/components/common/Chip";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -55,8 +56,7 @@ const Services = () => {
                 <TableRow key={service.id}>
                   <TableCell className="font-medium">{service.name}</TableCell>
                   <TableCell>
-                    {service.status}
-                    {/* <StatusChip status={service} activeStatus={service} /> */}
+                    <Chip status={service.status} />
                   </TableCell>
                   <TableCell>
                     {new Date(service.updated_at).toLocaleString()}
