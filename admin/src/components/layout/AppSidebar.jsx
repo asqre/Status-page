@@ -5,6 +5,7 @@ import {
   Settings,
   Component,
   InfoIcon,
+  Construction,
 } from "lucide-react";
 
 import {
@@ -34,6 +35,11 @@ const items = [
     title: "Incidents",
     url: "/incidents",
     icon: InfoIcon,
+  },
+  {
+    title: "Maintainance",
+    url: "/maintainance",
+    icon: Construction,
   },
   {
     title: "Settings",

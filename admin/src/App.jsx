@@ -19,6 +19,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/services" element={<Services />} />
           <Route path="/incidents" element={<Incidents />} />
+          <Route path="/maintainance" element={<Incidents />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
