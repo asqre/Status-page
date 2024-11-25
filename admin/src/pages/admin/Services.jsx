@@ -4,7 +4,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -55,26 +54,32 @@ const Services = () => {
               {services.map((service) => (
                 <TableRow key={service.id}>
                   <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>{service.status}</TableCell>
+                  <TableCell>
+                    {service.status}
+                    {/* <StatusChip status={service} activeStatus={service} /> */}
+                  </TableCell>
                   <TableCell>
                     {new Date(service.updated_at).toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">
-                    <button
-                      className="text-blue-500 hover:text-blue-700 mx-2"
-                      onClick={() => openServiceDialog(service)}
-                    >
-                      <FaEdit />
-                    </button>
-                    {/* Delete Button */}
-                    <button
-                      className="text-red-500 hover:text-red-700 mx-2"
-                      onClick={() =>
-                        console.log(`Delete service: ${service.id}`)
-                      }
-                    >
-                      <FaTrash />
-                    </button>
+                    <div className="flex justify-end space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openServiceDialog(service)}
+                      >
+                        <FaEdit className="mr-2" /> Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() =>
+                          console.log(`Delete service: ${service.id}`)
+                        }
+                      >
+                        <FaTrash className="mr-2" /> Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

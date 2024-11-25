@@ -1,8 +1,6 @@
 import React from "react";
 
 const StatusChip = ({ status, activeStatus, onStatusSelect }) => {
-  console.log(activeStatus);
-
   return (
     <div
       className={`
