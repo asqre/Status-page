@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import cors from "cors";
+import serviceRoutes from "./routes/Services.js";
 
 // configure env
 dotenv.config();
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // routes
-// app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/service", serviceRoutes);
 
 //rest api
 app.get("/", (req, res) => {
