@@ -6,11 +6,10 @@ const initialState = {
   isLoading: false,
   serviceData: {
     id: "",
+    tenant_id: "1",
     name: "",
     status: "",
     description: "",
-    updated_at: "",
-    created_at: "",
   },
   error: null,
 };
@@ -32,8 +31,6 @@ const serviceSlice = createSlice({
       const newService = {
         ...action.payload,
         id: state.services.length + 1,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       };
       state.services.push(newService);
     },
@@ -51,7 +48,6 @@ const serviceSlice = createSlice({
         state.services[index] = {
           ...state.services[index],
           ...action.payload,
-          updated_at: new Date().toISOString(),
         };
       }
     },
