@@ -6,12 +6,14 @@ import Services from "./pages/admin/Services";
 import Incidents from "./pages/admin/Incidents";
 import Profile from "./pages/admin/Profile";
 import Setting from "./pages/admin/Setting";
+import OnboardingPage from "./pages/OnBoarding";
 
 export default function App() {
   return (
     <header>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
       </Routes>
 
       <SignedIn>

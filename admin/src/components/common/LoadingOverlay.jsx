@@ -5,8 +5,8 @@ const LoadingOverlay = ({ isLoading }) => {
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-start justify-center z-[5000000] select-none">
-      <div className="relative flex flex-col items-center gap-4 mt-[20%]">
+    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-[5000000] select-none">
+      <div className="relative flex flex-col items-center gap-4">
         <ImSpinner9
           size={30}
           className="animate-spin"

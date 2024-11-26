@@ -1,3 +1,5 @@
+import axios from "@/api/axios";
+import LoadingOverlay from "@/components/common/LoadingOverlay";
 import { Button } from "@/components/ui/button";
 import {
   SignedIn,
@@ -7,16 +9,40 @@ import {
   UserButton,
   useUser,
 } from "@clerk/clerk-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (user) {
-    navigate("/dashboard");
-  }
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      if (user) {
+        try {
+          const hasOrganization = await axios.get(
+            `/organization/check/${user?.id}`
+          );
+
+          if (!hasOrganization) {
+            navigate("/onboarding");
+          } else {
+            navigate("/dashboard");
+          }
+        } catch (error) {
+          console.error("Error checking user status:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    checkUserStatus();
+  }, [user, navigate]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
@@ -61,6 +87,8 @@ const HomePage = () => {
           </SignUpButton>
         </div>
       </main>
+
+      <LoadingOverlay isLoading={isLoading} />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import cors from "cors";
 import serviceRoutes from "./routes/Services.js";
 import incidentRoutes from "./routes/Incidents.js";
+import organizationRoutes from "./routes/Organization.js";
 
 // configure env
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(morgan("dev"));
 // routes
 app.use("/api/v1/service", serviceRoutes);
 app.use("/api/v1/incident", incidentRoutes);
+app.use("/api/v1/organization", organizationRoutes);
 
 //rest api
 app.get("/", (req, res) => {
