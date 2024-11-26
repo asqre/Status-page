@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { services } from "@/data";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,10 +18,14 @@ import {
 } from "@/components/ui/dialog";
 import ServiceForm from "@/components/services/ServiceForm";
 import Chip from "@/components/common/Chip";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteService } from "@/redux/slices/serviceSlice";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentService, setCurrentService] = useState(null);
+  const { services } = useSelector((state) => state.services);
+  const dispatch = useDispatch();
 
   const openServiceDialog = (service) => {
     setCurrentService(service);
@@ -32,6 +35,10 @@ const Services = () => {
   const closeDialog = () => {
     setIsDialogOpen(false);
     setCurrentService(null);
+  };
+
+  const handleDeleteService = (serviceId) => {
+    dispatch(deleteService(serviceId));
   };
 
   return (
@@ -73,9 +80,7 @@ const Services = () => {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() =>
-                          console.log(`Delete service: ${service.id}`)
-                        }
+                        onClick={() => handleDeleteService(service.id)}
                       >
                         <FaTrash className="mr-2" /> Delete
                       </Button>

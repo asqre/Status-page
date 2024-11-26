@@ -1,20 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../common/InputField";
 import StatusChips from "../common/StatusChip";
 import { statuses } from "@/data";
 import TextArea from "../common/TextArea";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addService,
+  resetService,
+  setSeviceData,
+  updateService,
+} from "@/redux/slices/serviceSlice";
 
 const ServiceForm = ({ service, onClose }) => {
-  const [activeStatus, setActiveStatus] = useState(null);
+  const dispatch = useDispatch();
+  const { serviceData } = useSelector((state) => state.services);
+
+  useEffect(() => {
+    if (service) {
+      dispatch(setSeviceData(service));
+    }
+
+    return () => {
+      dispatch(resetService());
+    };
+  }, [service, dispatch]);
 
   const handleStatusSelect = (status) => {
-    setActiveStatus(status);
+    dispatch(setSeviceData({ status: status.name }));
   };
+
+  const onInputChange = (e) => {
+    const { id, value } = e.target;
+    dispatch(setSeviceData({ [id]: value }));
+  };
+
+  const handleSubmit = () => {
+    if (service) {
+      dispatch(
+        updateService({
+          ...serviceData,
+        })
+      );
+    } else {
+      dispatch(addService(serviceData));
+    }
+  };
+
+  const currentStatus = statuses.find(
+    (status) => status.name === serviceData.status
+  );
 
   return (
     <div className="flex flex-col gap-8">
-      <InputField label="Name" placeholder="Type here" id="name" />
+      <InputField
+        label="Name"
+        placeholder="Type here"
+        id="name"
+        value={serviceData.name}
+        onChange={onInputChange}
+      />
 
       <div className="flex flex-col space-y-[8px]">
         <label
@@ -35,7 +80,7 @@ const ServiceForm = ({ service, onClose }) => {
             <StatusChips
               key={index}
               status={status}
-              activeStatus={activeStatus}
+              activeStatus={currentStatus}
               onStatusSelect={handleStatusSelect}
             />
           ))}
@@ -47,10 +92,12 @@ const ServiceForm = ({ service, onClose }) => {
         placeholder="Type here"
         id="description"
         notRequired="true"
+        value={serviceData.description}
+        onChange={onInputChange}
       />
 
       <div className="flex justify-end mt-4">
-        <Button>Add</Button>
+        <Button onClick={handleSubmit}>{service ? "Update" : "Add"}</Button>
       </div>
     </div>
   );
