@@ -78,7 +78,6 @@ const Incidents = () => {
               <TableRow>
                 <TableHead>Incident Name</TableHead>
                 <TableHead>Current Status</TableHead>
-                <TableHead>Occurred At</TableHead>
                 <TableHead>Created At</TableHead>
                 <TableHead>View Incident</TableHead>
                 <TableHead className="text-right">Actions</TableHead>

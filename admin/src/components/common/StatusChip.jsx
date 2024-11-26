@@ -5,29 +5,24 @@ const StatusChip = ({ status, activeStatus, onStatusSelect }) => {
 
   const colorClasses = {
     green: {
-      bg: "bg-green-100",
-      text: "text-green-700",
-      border: "border-green-300",
+      bg: "bg-[#22c55E]",
+      text: "text-white font-bold",
     },
     purple: {
-      bg: "bg-purple-100",
-      text: "text-purple-700",
-      border: "border-purple-300",
+      bg: "bg-[#9333EA]",
+      text: "text-white font-bold",
     },
     yellow: {
-      bg: "bg-yellow-100",
-      text: "text-yellow-700",
-      border: "border-yellow-300",
+      bg: "bg-[#D97706]",
+      text: "text-white font-bold",
     },
     red: {
-      bg: "bg-red-100",
-      text: "text-red-700",
-      border: "border-red-300",
+      bg: "bg-[#DC2626]",
+      text: "text-white font-bold",
     },
     blue: {
-      bg: "bg-blue-100",
-      text: "text-blue-700",
-      border: "border-blue-300",
+      bg: "bg-[#2563EB]",
+      text: "text-white font-bold",
     },
   };
 
@@ -37,7 +32,7 @@ const StatusChip = ({ status, activeStatus, onStatusSelect }) => {
 
   return (
     <div
-      className={`flex items-center gap-2 p-2 rounded-md cursor-pointer border text-sm transition-colors ${classes.bg} ${classes.text} ${classes.border} hover:bg-gray-100`}
+      className={`flex items-center gap-2 p-2 rounded-md cursor-pointer border text-sm transition-colors ${classes.bg} ${classes.text} hover:opacity-85`}
       onClick={() => onStatusSelect(status)}
     >
       <status.icon className={`w-5 h-5 ${classes.text}`} />

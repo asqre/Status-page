@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import InputField from "../common/InputField";
 import StatusChips from "../common/StatusChip";
-import { statuses } from "@/data";
+import { incidentStatus } from "@/data";
 import TextArea from "../common/TextArea";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +45,7 @@ const IncidentForm = ({ incident, onClose }) => {
     onClose();
   };
 
-  const currentStatus = statuses.find(
+  const currentStatus = incidentStatus.find(
     (status) => status.name === incidentData.status
   );
 
@@ -74,7 +74,7 @@ const IncidentForm = ({ incident, onClose }) => {
           Status
         </label>
         <div className="flex flex-wrap gap-5">
-          {statuses.map((status, index) => (
+          {incidentStatus.map((status, index) => (
             <StatusChips
               key={index}
               status={status}
