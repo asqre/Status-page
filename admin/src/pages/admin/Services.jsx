@@ -19,10 +19,8 @@ import {
 import ServiceForm from "@/components/services/ServiceForm";
 import Chip from "@/components/common/Chip";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteService,
-  fetchServices,
-} from "@/redux/slices/serviceSlice";
+import { deleteService, fetchServices } from "@/redux/slices/serviceSlice";
+import { formatDate } from "@/utils.js";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -84,9 +82,7 @@ const Services = () => {
                   <TableCell>
                     <Chip status={service.status} />
                   </TableCell>
-                  <TableCell>
-                    {new Date(service.updated_at).toLocaleString()}
-                  </TableCell>
+                  <TableCell>{formatDate(service.updatedAt)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
                       <Button
