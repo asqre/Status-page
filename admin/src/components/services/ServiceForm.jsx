@@ -10,7 +10,7 @@ import {
   resetService,
   setSeviceData,
   updateService,
-} from "@/redux/slices/serviceSlice";
+} from "@/redux/services/serviceSlice";
 
 const ServiceForm = ({ service, onClose }) => {
   const dispatch = useDispatch();

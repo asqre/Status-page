@@ -19,7 +19,7 @@ import {
 import ServiceForm from "@/components/services/ServiceForm";
 import Chip from "@/components/common/Chip";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteService, fetchServices } from "@/redux/slices/serviceSlice";
+import { deleteService, fetchServices } from "@/redux/services/serviceSlice";
 import { formatDate } from "@/utils.js";
 
 const Services = () => {
