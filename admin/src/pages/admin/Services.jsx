@@ -23,22 +23,34 @@ import { deleteService } from "@/redux/slices/serviceSlice";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentService, setCurrentService] = useState(null);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
   const { services } = useSelector((state) => state.services);
   const dispatch = useDispatch();
 
   const openServiceDialog = (service) => {
-    setCurrentService(service);
+    setSelectedService(service);
     setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
     setIsDialogOpen(false);
-    setCurrentService(null);
+    setSelectedService(null);
   };
 
-  const handleDeleteService = (serviceId) => {
-    dispatch(deleteService(serviceId));
+  const openDeleteConfirmation = (service) => {
+    setSelectedService(service);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setSelectedService(null);
+    setIsConfirmDialogOpen(false);
+  };
+
+  const handleDeleteService = () => {
+    dispatch(deleteService(selectedService.id));
+    closeDeleteConfirmation();
   };
 
   return (
@@ -80,7 +92,7 @@ const Services = () => {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleDeleteService(service.id)}
+                        onClick={() => openDeleteConfirmation(service)}
                       >
                         <FaTrash className="mr-2" /> Delete
                       </Button>
@@ -92,14 +104,39 @@ const Services = () => {
           </Table>
         </div>
 
+        {/* Service Form Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
           <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {currentService ? "Edit Service" : "Add Service"}
+                {selectedService ? "Edit Service" : "Add Service"}
               </DialogTitle>
             </DialogHeader>
-            <ServiceForm service={currentService} onClose={closeDialog} />
+            <ServiceForm service={selectedService} onClose={closeDialog} />
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={isConfirmDialogOpen}
+          onOpenChange={closeDeleteConfirmation}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+            </DialogHeader>
+            <p>
+              Are you sure you want to delete the service{" "}
+              <strong>{selectedService?.name}</strong>?
+            </p>
+            <div className="flex justify-end space-x-2 mt-4">
+              <Button variant="outline" onClick={closeDeleteConfirmation}>
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={handleDeleteService}>
+                Delete
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
