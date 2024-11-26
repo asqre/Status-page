@@ -150,12 +150,8 @@ export const addTimelineEntry = async (req, res) => {
     const incident = await incidentModel.findByIdAndUpdate(
       id,
       {
-        $push: {
-          timeline: {
-            message,
-            status: status,
-          },
-        },
+        $push: { timeline: { message, status } },
+        status,
       },
       {
         new: true,
