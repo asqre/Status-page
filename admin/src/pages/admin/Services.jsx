@@ -79,7 +79,7 @@ const Services = () => {
             </TableHeader>
             <TableBody>
               {services.map((service) => (
-                <TableRow key={service.id}>
+                <TableRow key={service._id}>
                   <TableCell className="font-medium">{service.name}</TableCell>
                   <TableCell>
                     <Chip status={service.status} />
