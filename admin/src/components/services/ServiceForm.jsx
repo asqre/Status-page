@@ -14,16 +14,16 @@ import {
 
 const ServiceForm = ({ service, onClose }) => {
   const dispatch = useDispatch();
-  const { serviceData } = useSelector((state) => state.services);
+  const { serviceData, isLoading, error } = useSelector(
+    (state) => state.services
+  );
 
   useEffect(() => {
     if (service) {
       dispatch(setSeviceData(service));
     }
 
-    return () => {
-      dispatch(resetService());
-    };
+    return () => dispatch(resetService());
   }, [service, dispatch]);
 
   const handleStatusSelect = (status) => {
@@ -37,11 +37,7 @@ const ServiceForm = ({ service, onClose }) => {
 
   const handleSubmit = () => {
     if (service) {
-      dispatch(
-        updateService({
-          ...serviceData,
-        })
-      );
+      dispatch(updateService({ id: serviceData._id, serviceData }));
     } else {
       dispatch(addService(serviceData));
     }

@@ -11,7 +11,7 @@ export const createService = async (req, res) => {
       });
     }
 
-    if (!name ) {
+    if (!name) {
       return res.status(400).send({
         success: false,
         message: "service name or status must be specified",
@@ -80,11 +80,11 @@ export const getServiceById = async (req, res) => {
 
 export const updateService = async (req, res) => {
   try {
-    const updateData = { ...req.body };
+    const serviceData = { ...req.body };
 
     const service = await serviceModel.findByIdAndUpdate(
       req.params.id,
-      updateData,
+      serviceData,
       {
         new: true,
         runValidators: true,

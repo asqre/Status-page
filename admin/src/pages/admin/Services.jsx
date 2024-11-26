@@ -1,5 +1,5 @@
 import Layout from "@/components/layout/Layout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import {
   Table,
@@ -19,14 +19,21 @@ import {
 import ServiceForm from "@/components/services/ServiceForm";
 import Chip from "@/components/common/Chip";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteService } from "@/redux/slices/serviceSlice";
+import {
+  deleteService,
+  fetchServices,
+} from "@/redux/slices/serviceSlice";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const { services } = useSelector((state) => state.services);
+  const { services, isLoading, error } = useSelector((state) => state.services);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchServices());
+  }, [dispatch]);
 
   const openServiceDialog = (service) => {
     setSelectedService(service);
@@ -48,8 +55,8 @@ const Services = () => {
     setIsConfirmDialogOpen(false);
   };
 
-  const handleDeleteService = () => {
-    dispatch(deleteService(selectedService.id));
+  const handleDeleteService = (id) => {
+    dispatch(deleteService(id));
     closeDeleteConfirmation();
   };
 
@@ -133,7 +140,10 @@ const Services = () => {
               <Button variant="outline" onClick={closeDeleteConfirmation}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={handleDeleteService}>
+              <Button
+                variant="destructive"
+                onClick={() => handleDeleteService(selectedService._id)}
+              >
                 Delete
               </Button>
             </div>
