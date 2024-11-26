@@ -45,6 +45,8 @@ const ServiceForm = ({ service, onClose }) => {
     } else {
       dispatch(addService(serviceData));
     }
+
+    onClose();
   };
 
   const currentStatus = statuses.find(
