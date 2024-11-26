@@ -21,6 +21,7 @@ import Chip from "@/components/common/Chip";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteService, fetchServices } from "@/redux/services/serviceSlice";
 import { formatDate } from "@/utils.js";
+import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -64,6 +65,12 @@ const Services = () => {
         <div className="flex justify-end w-[90%]">
           <Button onClick={() => openServiceDialog(null)}>Add Services</Button>
         </div>
+
+        {error && (
+          <div className="w-[90%] bg-red-200 text-red-500 p-4 rounded-lg mt-4 text-center">
+            <strong>Error:</strong> {error || "An error occurred"}
+          </div>
+        )}
 
         <div className="w-[90%] border rounded-lg shadow-md">
           <Table>
@@ -146,6 +153,7 @@ const Services = () => {
           </DialogContent>
         </Dialog>
       </div>
+      <LoadingOverlay isLoading={isLoading} />
     </Layout>
   );
 };

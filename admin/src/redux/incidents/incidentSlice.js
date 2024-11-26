@@ -8,7 +8,7 @@ export const fetchIncidents = createAsyncThunk(
       const response = await axios.get("/incident");
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -20,7 +20,7 @@ export const addIncident = createAsyncThunk(
       const response = await axios.post("/incident", incidentData);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -32,7 +32,7 @@ export const updateIncident = createAsyncThunk(
       const response = await axios.put(`/incident/${id}`, incidentData);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -44,7 +44,7 @@ export const deleteIncident = createAsyncThunk(
       await axios.delete(`/incident/${id}`);
       return id;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -59,7 +59,7 @@ export const addTimelineEntry = createAsyncThunk(
       );
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );

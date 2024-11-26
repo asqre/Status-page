@@ -8,7 +8,7 @@ export const fetchServices = createAsyncThunk(
       const response = await axios.get("/service");
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -20,7 +20,7 @@ export const addService = createAsyncThunk(
       const response = await axios.post("/service", serviceData);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -32,7 +32,7 @@ export const updateService = createAsyncThunk(
       const response = await axios.put(`/service/${id}`, serviceData);
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -44,7 +44,7 @@ export const deleteService = createAsyncThunk(
       await axios.delete(`/service/${id}`);
       return id;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
