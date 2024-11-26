@@ -161,7 +161,7 @@ const Incidents = () => {
 
         {/* Timeline Dialog */}
         <Dialog open={isTimelineDialogOpen} onOpenChange={closeTimelineDialog}>
-          <DialogContent className="max-w-[600px] w-full max-h-[80vh] overflow-y-auto p-6">
+          <DialogContent className="max-w-[95vw] w-auto min-w-[300px] max-h-[80vh] overflow-y-auto p-6">
             <DialogHeader>
               <DialogTitle>Incident Timeline</DialogTitle>
             </DialogHeader>
@@ -171,7 +171,7 @@ const Incidents = () => {
 
         {/* Record Update Dialog */}
         <Dialog open={isRecordDialogOpen} onOpenChange={closeRecordDialog}>
-          <DialogContent className="max-w-[600px] w-full max-h-[80vh] overflow-y-auto p-6">
+          <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[80vh] p-6 rounded-lg overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Record Update</DialogTitle>
             </DialogHeader>
