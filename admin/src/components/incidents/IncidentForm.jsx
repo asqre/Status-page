@@ -86,11 +86,11 @@ const IncidentForm = ({ incident, onClose }) => {
       </div>
 
       <TextArea
-        label="Description"
+        label="Message"
         placeholder="Type here"
-        id="description"
+        id="message"
         notRequired="true"
-        value={incidentData.description}
+        value={incidentData.message}
         onChange={onInputChange}
       />
 

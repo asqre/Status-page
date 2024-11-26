@@ -69,7 +69,7 @@ const Services = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[250px]">Service Name</TableHead>
+                <TableHead>Service Name</TableHead>
                 <TableHead>Current Status</TableHead>
                 <TableHead>Last Updated</TableHead>
                 <TableHead className="text-right">Actions</TableHead>

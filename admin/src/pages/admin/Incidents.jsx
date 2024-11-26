@@ -68,7 +68,7 @@ const Incidents = () => {
       <div className="flex flex-col items-center gap-10 w-[100%] h-[90vh]">
         <div className="flex justify-end w-[90%]">
           <Button onClick={() => openIncidentDialog(null)}>
-            Add Incidents
+            Report new Incident
           </Button>
         </div>
 
@@ -76,9 +76,11 @@ const Incidents = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[250px]">Incident Name</TableHead>
+                <TableHead>Incident Name</TableHead>
                 <TableHead>Current Status</TableHead>
-                <TableHead>Last Updated</TableHead>
+                <TableHead>Occurred At</TableHead>
+                <TableHead>Created At</TableHead>
+                <TableHead>View Incident</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -119,7 +121,7 @@ const Incidents = () => {
           <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {selectedIncident ? "Edit Incident" : "Add Incident"}
+                {selectedIncident ? "Edit Incident" : "Report new Incident"}
               </DialogTitle>
             </DialogHeader>
             <IncidentForm incident={selectedIncident} onClose={closeDialog} />
