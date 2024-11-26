@@ -49,6 +49,21 @@ export const deleteIncident = createAsyncThunk(
   }
 );
 
+export const addTimelineEntry = createAsyncThunk(
+  "incidents/addTimelineEntry",
+  async ({ id, timelineData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `/incident/${id}/timeline`,
+        timelineData
+      );
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   incidents: [],
   isLoading: false,
@@ -58,6 +73,7 @@ const initialState = {
     status: "",
     message: "",
     occurredAt: "",
+    timeline: [],
   },
   error: null,
 };
@@ -76,6 +92,7 @@ const incidentSlice = createSlice({
         status: "",
         message: "",
         occurredAt: "",
+        timeline: [],
       };
     },
   },
@@ -139,6 +156,33 @@ const incidentSlice = createSlice({
       );
     });
     builder.addCase(deleteIncident.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
+    // Add Timeline Entry
+    builder.addCase(addTimelineEntry.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    // builder.addCase(addTimelineEntry.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   const index = state.incidents.findIndex(
+    //     (incident) => incident._id === action.payload._id
+    //   );
+    //   if (index !== -1) {
+    //     state.incidents[index].timeline.push(action.payload);
+    //   }
+    // });
+    builder.addCase(addTimelineEntry.fulfilled, (state, action) => {
+      const index = state.incidents.findIndex(
+        (incident) => incident._id === action.payload._id
+      );
+      if (index !== -1) {
+        state.incidents[index] = action.payload;
+      }
+    });
+    builder.addCase(addTimelineEntry.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     });

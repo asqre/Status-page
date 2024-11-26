@@ -134,3 +134,52 @@ export const deleteIncident = async (req, res) => {
     });
   }
 };
+
+export const addTimelineEntry = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { message, status } = req.body;
+
+    if (!message || !status) {
+      return res.status(400).send({
+        success: false,
+        message: "Timeline entry message  or status is required",
+      });
+    }
+
+    const incident = await incidentModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          timeline: {
+            message,
+            status: status,
+          },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!incident) {
+      return res.status(404).send({
+        success: false,
+        message: "Incident not found",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Timeline entry added successfully",
+      data: incident,
+    });
+  } catch (error) {
+    res.status(400).send({
+      success: false,
+      message: "Failed to add timeline entry",
+      error: error.message,
+    });
+  }
+};

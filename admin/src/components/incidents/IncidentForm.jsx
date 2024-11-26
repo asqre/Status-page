@@ -39,7 +39,16 @@ const IncidentForm = ({ incident, onClose }) => {
     if (incident) {
       dispatch(updateIncident({ id: incidentData._id, incidentData }));
     } else {
-      dispatch(addIncident(incidentData));
+      const newIncidentData = {
+        ...incidentData,
+        timeline: [
+          {
+            message: incidentData.message || "Incident created",
+            status: incidentData.status,
+          },
+        ],
+      };
+      dispatch(addIncident(newIncidentData));
     }
 
     onClose();

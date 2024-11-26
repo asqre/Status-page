@@ -165,17 +165,20 @@ const Incidents = () => {
             <DialogHeader>
               <DialogTitle>Incident Timeline</DialogTitle>
             </DialogHeader>
-            <IncidentTimeLine selectedIncident={selectedIncident} />
+            <IncidentTimeLine incident={selectedIncident} />
           </DialogContent>
         </Dialog>
 
-        {/* Record Update */}
+        {/* Record Update Dialog */}
         <Dialog open={isRecordDialogOpen} onOpenChange={closeRecordDialog}>
           <DialogContent className="max-w-[600px] w-full max-h-[80vh] overflow-y-auto p-6">
             <DialogHeader>
               <DialogTitle>Record Update</DialogTitle>
             </DialogHeader>
-            <RecordUpdate selectedIncident={selectedIncident} />
+            <RecordUpdate
+              incident={selectedIncident}
+              onClose={closeRecordDialog}
+            />
           </DialogContent>
         </Dialog>
 
