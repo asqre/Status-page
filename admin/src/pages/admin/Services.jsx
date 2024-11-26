@@ -124,7 +124,7 @@ const Services = () => {
           open={isConfirmDialogOpen}
           onOpenChange={closeDeleteConfirmation}
         >
-          <DialogContent>
+          <DialogContent className="max-w-[90vw] w-auto">
             <DialogHeader>
               <DialogTitle>Confirm Deletion</DialogTitle>
             </DialogHeader>

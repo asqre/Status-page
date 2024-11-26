@@ -25,11 +25,16 @@ import {
 } from "@/redux/incidents/incidentSlice";
 import { formatDate } from "@/utils.js";
 import { Eye } from "lucide-react";
+import IncidentTimeLine from "@/components/incidents/IncidentTimeLine";
+import RecordUpdate from "@/components/incidents/RecordUpdate";
 
 const Incidents = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState(null);
+  const [isTimelineDialogOpen, setIsTimelineDialogOpen] = useState(false);
+  const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false);
+
   const { incidents, isLoading, error } = useSelector(
     (state) => state.incidents
   );
@@ -47,6 +52,26 @@ const Incidents = () => {
   const closeDialog = () => {
     setIsDialogOpen(false);
     setSelectedIncident(null);
+  };
+
+  const openTimelineDialog = (incident) => {
+    setSelectedIncident(incident);
+    setIsTimelineDialogOpen(true);
+  };
+
+  const closeTimelineDialog = () => {
+    setSelectedIncident(null);
+    setIsTimelineDialogOpen(false);
+  };
+
+  const openRecordDialog = (incident) => {
+    setSelectedIncident(incident);
+    setIsRecordDialogOpen(true);
+  };
+
+  const closeRecordDialog = () => {
+    setSelectedIncident(null);
+    setIsRecordDialogOpen(false);
   };
 
   const openDeleteConfirmation = (incident) => {
@@ -80,6 +105,7 @@ const Incidents = () => {
                 <TableHead>Incident Name</TableHead>
                 <TableHead>Current Status</TableHead>
                 <TableHead>Created At</TableHead>
+                <TableHead>Record</TableHead>
                 <TableHead>View Incident</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -93,7 +119,18 @@ const Incidents = () => {
                   </TableCell>
                   <TableCell>{formatDate(incident.createdAt)}</TableCell>
                   <TableCell>
-                    <button className="flex items-center gap-2 text-blue-600 hover:underline">
+                    <button
+                      className="flex items-center gap-2 text-blue-600 font-semibold hover:underline"
+                      onClick={() => openRecordDialog(incident)}
+                    >
+                      Record Update
+                    </button>
+                  </TableCell>
+                  <TableCell>
+                    <button
+                      className="flex items-center gap-2 text-green-600 font-semibold hover:underline"
+                      onClick={() => openTimelineDialog(incident)}
+                    >
                       <Eye size={16} />
                       <span className="">View Incident</span>
                     </button>
@@ -122,6 +159,26 @@ const Incidents = () => {
           </Table>
         </div>
 
+        {/* Timeline Dialog */}
+        <Dialog open={isTimelineDialogOpen} onOpenChange={closeTimelineDialog}>
+          <DialogContent className="max-w-[600px] w-full max-h-[80vh] overflow-y-auto p-6">
+            <DialogHeader>
+              <DialogTitle>Incident Timeline</DialogTitle>
+            </DialogHeader>
+            <IncidentTimeLine selectedIncident={selectedIncident} />
+          </DialogContent>
+        </Dialog>
+
+        {/* Record Update */}
+        <Dialog open={isRecordDialogOpen} onOpenChange={closeRecordDialog}>
+          <DialogContent className="max-w-[600px] w-full max-h-[80vh] overflow-y-auto p-6">
+            <DialogHeader>
+              <DialogTitle>Record Update</DialogTitle>
+            </DialogHeader>
+            <RecordUpdate selectedIncident={selectedIncident} />
+          </DialogContent>
+        </Dialog>
+
         {/* Incident Form Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
           <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
@@ -139,7 +196,7 @@ const Incidents = () => {
           open={isConfirmDialogOpen}
           onOpenChange={closeDeleteConfirmation}
         >
-          <DialogContent>
+          <DialogContent className="max-w-[90vw] w-auto">
             <DialogHeader>
               <DialogTitle>Confirm Deletion</DialogTitle>
             </DialogHeader>
