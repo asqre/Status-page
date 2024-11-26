@@ -68,9 +68,6 @@ const serviceSlice = createSlice({
     setSeviceData: (state, action) => {
       state.serviceData = { ...state.serviceData, ...action.payload };
     },
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
     resetService: (state) => {
       state.serviceData = {
         ...state.serviceData,
