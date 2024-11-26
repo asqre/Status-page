@@ -6,47 +6,47 @@ import TextArea from "../common/TextArea";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addService,
-  resetService,
-  setSeviceData,
-  updateService,
-} from "@/redux/services/serviceSlice";
+  addIncident,
+  resetIncident,
+  setIncidentData,
+  updateIncident,
+} from "@/redux/incidents/incidentSlice";
 
-const ServiceForm = ({ service, onClose }) => {
+const IncidentForm = ({ incident, onClose }) => {
   const dispatch = useDispatch();
-  const { serviceData, isLoading, error } = useSelector(
-    (state) => state.services
+  const { incidentData, isLoading, error } = useSelector(
+    (state) => state.incidents
   );
 
   useEffect(() => {
-    if (service) {
-      dispatch(setSeviceData(service));
+    if (incident) {
+      dispatch(setIncidentData(incident));
     }
 
-    return () => dispatch(resetService());
-  }, [service, dispatch]);
+    return () => dispatch(resetIncident());
+  }, [incident, dispatch]);
 
   const handleStatusSelect = (status) => {
-    dispatch(setSeviceData({ status: status.name }));
+    dispatch(setIncidentData({ status: status.name }));
   };
 
   const onInputChange = (e) => {
     const { id, value } = e.target;
-    dispatch(setSeviceData({ [id]: value }));
+    dispatch(setIncidentData({ [id]: value }));
   };
 
   const handleSubmit = () => {
-    if (service) {
-      dispatch(updateService({ id: serviceData._id, serviceData }));
+    if (incident) {
+      dispatch(updateIncident({ id: incidentData._id, incidentData }));
     } else {
-      dispatch(addService(serviceData));
+      dispatch(addIncident(incidentData));
     }
 
     onClose();
   };
 
   const currentStatus = statuses.find(
-    (status) => status.name === serviceData.status
+    (status) => status.name === incidentData.status
   );
 
   return (
@@ -55,7 +55,7 @@ const ServiceForm = ({ service, onClose }) => {
         label="Name"
         placeholder="Type here"
         id="name"
-        value={serviceData.name}
+        value={incidentData.name}
         onChange={onInputChange}
       />
 
@@ -90,15 +90,15 @@ const ServiceForm = ({ service, onClose }) => {
         placeholder="Type here"
         id="description"
         notRequired="true"
-        value={serviceData.description}
+        value={incidentData.description}
         onChange={onInputChange}
       />
 
       <div className="flex justify-end mt-4">
-        <Button onClick={handleSubmit}>{service ? "Update" : "Add"}</Button>
+        <Button onClick={handleSubmit}>{incident ? "Update" : "Add"}</Button>
       </div>
     </div>
   );
 };
 
-export default ServiceForm;
+export default IncidentForm;
