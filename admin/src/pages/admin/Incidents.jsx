@@ -105,6 +105,7 @@ const Incidents = () => {
                 <TableHead>Incident Name</TableHead>
                 <TableHead>Current Status</TableHead>
                 <TableHead>Created At</TableHead>
+                <TableHead>Last Updated</TableHead>
                 <TableHead>Record</TableHead>
                 <TableHead>View Incident</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -118,6 +119,7 @@ const Incidents = () => {
                     <Chip status={incident.status} />
                   </TableCell>
                   <TableCell>{formatDate(incident.createdAt)}</TableCell>
+                  <TableCell>{formatDate(incident.updatedAt)}</TableCell>
                   <TableCell>
                     <button
                       className="flex items-center gap-2 text-blue-600 font-semibold hover:underline"
