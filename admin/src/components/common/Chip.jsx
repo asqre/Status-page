@@ -21,7 +21,7 @@ const Chip = ({ status }) => {
 
   return (
     <div
-      className={`flex items-center justify-center gap-2 px-3 py-2 w-[200px] rounded-full text-white ${config.color}`}
+      className={`flex items-center justify-center gap-2 px-3 py-2 w-[180px] rounded-full text-white ${config.color}`}
     >
       <Icon className="w-4 h-4" />
       <span className="text-sm">{status}</span>
