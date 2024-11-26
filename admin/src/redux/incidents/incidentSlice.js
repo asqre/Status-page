@@ -165,15 +165,6 @@ const incidentSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     });
-    // builder.addCase(addTimelineEntry.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   const index = state.incidents.findIndex(
-    //     (incident) => incident._id === action.payload._id
-    //   );
-    //   if (index !== -1) {
-    //     state.incidents[index].timeline.push(action.payload);
-    //   }
-    // });
     builder.addCase(addTimelineEntry.fulfilled, (state, action) => {
       const index = state.incidents.findIndex(
         (incident) => incident._id === action.payload._id
