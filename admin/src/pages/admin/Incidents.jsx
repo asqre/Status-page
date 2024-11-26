@@ -24,6 +24,7 @@ import {
   fetchIncidents,
 } from "@/redux/incidents/incidentSlice";
 import { formatDate } from "@/utils.js";
+import { Eye } from "lucide-react";
 
 const Incidents = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -90,7 +91,13 @@ const Incidents = () => {
                   <TableCell>
                     <Chip status={incident.status} />
                   </TableCell>
-                  <TableCell>{formatDate(incident.updatedAt)}</TableCell>
+                  <TableCell>{formatDate(incident.createdAt)}</TableCell>
+                  <TableCell>
+                    <button className="flex items-center gap-2 text-blue-600 hover:underline">
+                      <Eye size={16} />
+                      <span className="">View Incident</span>
+                    </button>
+                  </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
                       <Button
