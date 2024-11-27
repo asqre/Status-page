@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -12,30 +12,90 @@ import {
 import { AlertCircle, ClipboardList, BarChart } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import axios from "@/api/axios";
-import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const ServiceStatusBadge = ({ status }) => {
   const badgeClasses = {
-    "Operational": "bg-green-100 text-green-800",
+    Operational: "bg-green-100 text-green-800",
     "Performance Issues": "bg-purple-100 text-purple-800",
     "Partial Outage": "bg-yellow-100 text-yellow-800",
     "Major Outage": "bg-red-100 text-red-800",
-    "Unknown": "bg-blue-100 text-blue-800",
-    "Reported":  "bg-red-100 text-red-800" ,
-    "Investigating": "bg-blue-100 text-blue-800",
-    "Identified": "bg-purple-100 text-purple-800",
-    "Watching": "bg-yellow-100 text-yellow-800" ,
-    "Fixed": "bg-green-100 text-green-800" ,
+    Unknown: "bg-blue-100 text-blue-800",
+    Reported: "bg-red-100 text-red-800",
+    Investigating: "bg-blue-100 text-blue-800",
+    Identified: "bg-purple-100 text-purple-800",
+    Watching: "bg-yellow-100 text-yellow-800",
+    Fixed: "bg-green-100 text-green-800",
   };
 
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${
+      className={`px-2 py-1 rounded-lg text-xs font-medium ${
         badgeClasses[status] || "bg-gray-100"
       }`}
     >
       {status}
     </span>
+  );
+};
+
+const IncidentTimeline = ({ incidents }) => {
+  const [selectedIncident, setSelectedIncident] = useState(null);
+
+  const renderTimelineItems = (incident) => {
+    return incident.timeline.map((timelineEntry, index) => (
+      <div key={index} className="flex items-start space-x-3 mb-3">
+        <div className="w-3 h-3 bg-primary rounded-full mt-2"></div>
+        <div className="flex-1">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium">{timelineEntry.message}</p>
+              <p className="text-xs text-muted-foreground">
+                {new Date(timelineEntry.updatedAt).toLocaleString()}
+              </p>
+            </div>
+            <ServiceStatusBadge status={timelineEntry.status} />
+          </div>
+        </div>
+      </div>
+    ));
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Timelines</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {incidents.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            No incident timelines found
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {incidents.map((incident) => (
+              <div key={incident._id} className="border rounded-lg p-4">
+                <div
+                  className="flex justify-between items-center cursor-pointer hover:bg-secondary/20 p-2 rounded"
+                  onClick={() =>
+                    setSelectedIncident(
+                      selectedIncident === incident._id ? null : incident._id
+                    )
+                  }
+                >
+                  <div>
+                    <h3 className="font-semibold">{incident.name}</h3>
+                    <ServiceStatusBadge status={incident.status} />
+                  </div>
+                </div>
+                {selectedIncident === incident._id && (
+                  <div className="mt-4">{renderTimelineItems(incident)}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
@@ -54,7 +114,6 @@ const OrganizationDashboard = () => {
       try {
         setLoading(true);
         const servicesResponse = await axios.get(`/service/${slug}/service`);
-
         setServices(servicesResponse.data.data);
 
         const incidentsResponse = await axios.get(`/incident/${slug}/incident`);
@@ -70,14 +129,14 @@ const OrganizationDashboard = () => {
     if (slug) {
       fetchOrganizationData();
     }
-  }, []);
+  }, [slug]);
 
   if (error) {
     return (
-      <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
-        <Card className="w-full">
+      <div className="container mx-auto p-6 bg-secondary/10 min-h-screen">
+        <Card>
           <CardHeader>
-            <p className="text-red-500">{error}</p>
+            <p className="text-destructive">{error}</p>
           </CardHeader>
         </Card>
       </div>
@@ -85,7 +144,7 @@ const OrganizationDashboard = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="container mx-auto p-6 bg-secondary/10 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center flex items-center justify-center">
         <BarChart className="mr-3" /> Organizational Services Dashboard
       </h1>
@@ -110,7 +169,9 @@ const OrganizationDashboard = () => {
           <CardContent>
             <TabsContent value="services">
               {services.length === 0 ? (
-                <p className="text-center text-gray-500">No services found</p>
+                <p className="text-center text-muted-foreground">
+                  No services found
+                </p>
               ) : (
                 <Table>
                   <TableHeader>
@@ -141,7 +202,9 @@ const OrganizationDashboard = () => {
 
             <TabsContent value="incidents">
               {incidents.length === 0 ? (
-                <p className="text-center text-gray-500">No incidents found</p>
+                <p className="text-center text-muted-foreground">
+                  No incidents found
+                </p>
               ) : (
                 <Table>
                   <TableHeader>
@@ -174,7 +237,8 @@ const OrganizationDashboard = () => {
           </CardContent>
         </Tabs>
       </Card>
-      <LoadingOverlay isLoading={loading} />
+
+      <IncidentTimeline incidents={incidents} />
     </div>
   );
 };
