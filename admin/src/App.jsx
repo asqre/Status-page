@@ -33,7 +33,7 @@ export default function App() {
   }, [dispatch]);
 
   if (!isSessionLoaded) {
-    return <LoadingOverlay isLoading={isSessionLoaded} />;
+    return <LoadingOverlay isLoading={!isSessionLoaded} />;
   }
 
   return (

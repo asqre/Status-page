@@ -24,7 +24,7 @@ const ProfilePage = () => {
                 My Profile
               </h1>
               <SignOutButton>
-                <Button>Logout</Button>
+                <Button onClick={() => sessionStorage.clear()}>Logout</Button>
               </SignOutButton>
             </div>
 
