@@ -33,14 +33,10 @@ const OnboardingPage = () => {
         userEmail: user.primaryEmailAddress.emailAddress,
       });
 
-      const organization_id = response.data.data._id;
-
-      await user.update({
-        unsafeMetadata: {
-          ...response.data.data,
-          organization_id: organization_id,
-        },
-      });
+      sessionStorage.setItem(
+        "organization",
+        JSON.stringify(response.data.data)
+      );
 
       navigate("/dashboard");
     } catch (error) {

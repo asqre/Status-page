@@ -103,7 +103,11 @@ export const createOrganization = async (req, res) => {
     res.status(201).send({
       success: true,
       message: "Organization created successfully",
-      data: savedOrganization,
+      data: {
+        companyName: savedOrganization.companyName,
+        slug: savedOrganization.slug,
+        id: savedOrganization._id,
+      },
     });
   } catch (error) {
     if (error.code === 11000) {
