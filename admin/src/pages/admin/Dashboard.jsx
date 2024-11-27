@@ -1,11 +1,7 @@
 import Layout from "@/components/layout/Layout";
-import { useUser } from "@clerk/clerk-react";
 import React from "react";
 
 const Dashboard = () => {
-  const user = useUser();
-  console.log(user.user.unsafeMetadata?.organization_id);
-
   return (
     <Layout>
       <div className="min-h-screen bg-purple-50 flex flex-col items-center justify-center">
