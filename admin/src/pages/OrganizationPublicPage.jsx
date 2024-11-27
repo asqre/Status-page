@@ -117,7 +117,7 @@ const OrganizationPublicPage = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:8000");
+    const newSocket = io(import.meta.env.VITE_BASE_API_URL);
 
     newSocket.on("connect", () => {
       console.log("Connected to server:", newSocket.id);
