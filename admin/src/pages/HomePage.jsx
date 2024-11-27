@@ -31,6 +31,11 @@ const HomePage = () => {
           if (!hasOrganization) {
             navigate("/onboarding");
           } else {
+            sessionStorage.setItem(
+              "organization",
+              JSON.stringify(response.data.organization)
+            );
+
             navigate("/dashboard");
           }
         } catch (error) {
