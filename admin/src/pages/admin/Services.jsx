@@ -61,97 +61,109 @@ const Services = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col items-center gap-10 w-[100%] h-[90vh]">
-        <div className="flex justify-end w-[90%]">
-          <Button onClick={() => openServiceDialog(null)}>Add Services</Button>
-        </div>
-
-        {error && (
-          <div className="w-[90%] bg-red-200 text-red-500 p-4 rounded-lg mt-4 text-center">
-            <strong>Error:</strong> {error || "An error occurred"}
-          </div>
-        )}
-
-        <div className="w-[90%] border rounded-lg shadow-md">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Service Name</TableHead>
-                <TableHead>Current Status</TableHead>
-                <TableHead>Last Updated</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {services.map((service) => (
-                <TableRow key={service._id}>
-                  <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>
-                    <Chip status={service.status} />
-                  </TableCell>
-                  <TableCell>{formatDate(service.updatedAt)}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openServiceDialog(service)}
-                      >
-                        <FaEdit className="mr-2" /> Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => openDeleteConfirmation(service)}
-                      >
-                        <FaTrash className="mr-2" /> Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Service Form Dialog */}
-        <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-          <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {selectedService ? "Edit Service" : "Add Service"}
-              </DialogTitle>
-            </DialogHeader>
-            <ServiceForm service={selectedService} onClose={closeDialog} />
-          </DialogContent>
-        </Dialog>
-
-        {/* Delete Confirmation Dialog */}
-        <Dialog
-          open={isConfirmDialogOpen}
-          onOpenChange={closeDeleteConfirmation}
+      <div className="container mx-auto p-6">
+        <h1
+          className="text-xl text-[#0E3B65] mb-4 uppercase"
+          style={{ fontFamily: "Mukta" }}
         >
-          <DialogContent className="max-w-[90vw] w-auto">
-            <DialogHeader>
-              <DialogTitle>Confirm Deletion</DialogTitle>
-            </DialogHeader>
-            <p>
-              Are you sure you want to delete the service{" "}
-              <strong>{selectedService?.name}</strong>?
-            </p>
-            <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="outline" onClick={closeDeleteConfirmation}>
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => handleDeleteService(selectedService._id)}
-              >
-                Delete
-              </Button>
+          Services
+        </h1>
+        <div className="flex flex-col items-center gap-10 w-[100%]">
+          <div className="flex justify-end w-[100%]">
+            <Button onClick={() => openServiceDialog(null)}>
+              Add Services
+            </Button>
+          </div>
+
+          {error && (
+            <div className="w-[100%] bg-red-200 text-red-500 p-4 rounded-lg mt-4 text-center">
+              <strong>Error:</strong> {error || "An error occurred"}
             </div>
-          </DialogContent>
-        </Dialog>
+          )}
+
+          <div className="w-[100%] border rounded-lg shadow-md">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Service Name</TableHead>
+                  <TableHead>Current Status</TableHead>
+                  <TableHead>Last Updated</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {services.map((service) => (
+                  <TableRow key={service._id}>
+                    <TableCell className="font-medium">
+                      {service.name}
+                    </TableCell>
+                    <TableCell>
+                      <Chip status={service.status} />
+                    </TableCell>
+                    <TableCell>{formatDate(service.updatedAt)}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openServiceDialog(service)}
+                        >
+                          <FaEdit className="mr-2" /> Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => openDeleteConfirmation(service)}
+                        >
+                          <FaTrash className="mr-2" /> Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Service Form Dialog */}
+          <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
+            <DialogContent className="w-[90vw] sm:w-[600px] h-auto max-h-[90vh] p-6 rounded-lg overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedService ? "Edit Service" : "Add Service"}
+                </DialogTitle>
+              </DialogHeader>
+              <ServiceForm service={selectedService} onClose={closeDialog} />
+            </DialogContent>
+          </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <Dialog
+            open={isConfirmDialogOpen}
+            onOpenChange={closeDeleteConfirmation}
+          >
+            <DialogContent className="max-w-[90vw] w-auto">
+              <DialogHeader>
+                <DialogTitle>Confirm Deletion</DialogTitle>
+              </DialogHeader>
+              <p>
+                Are you sure you want to delete the service{" "}
+                <strong>{selectedService?.name}</strong>?
+              </p>
+              <div className="flex justify-end space-x-2 mt-4">
+                <Button variant="outline" onClick={closeDeleteConfirmation}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => handleDeleteService(selectedService._id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
       <LoadingOverlay isLoading={isLoading} />
     </Layout>
