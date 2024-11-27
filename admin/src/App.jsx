@@ -33,7 +33,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
-        <Route path="/public" element={<OrganizationPublicPage />} />
+        <Route path="/organization/:slug" element={<OrganizationPublicPage />} />
       </Routes>
 
       <SignedIn>

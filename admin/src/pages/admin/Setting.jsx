@@ -24,10 +24,10 @@ const Setting = () => {
           <label className="block text-sm font-medium">Public Page URL:</label>
           <div className="flex items-center">
             <h6>
-              ${window.location.origin}/{organizationDetails?.slug}
+              ${window.location.origin}/organization/{organizationDetails?.slug}
             </h6>
             <CopyToClipboard
-              text={`${window.location.origin}/${organizationDetails?.slug}`}
+              text={`${window.location.origin}/organization/${organizationDetails?.slug}`}
               onCopy={() => setCopied(true)}
             >
               <button className="text-gray-500 px-4 py-2 rounded">
