@@ -16,11 +16,16 @@ import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const ServiceStatusBadge = ({ status }) => {
   const badgeClasses = {
-    Operational: "bg-green-100 text-green-800",
-    "Performance Issues": "bg-yellow-100 text-yellow-800",
-    "Partial Outage": "bg-orange-100 text-orange-800",
+    "Operational": "bg-green-100 text-green-800",
+    "Performance Issues": "bg-purple-100 text-purple-800",
+    "Partial Outage": "bg-yellow-100 text-yellow-800",
     "Major Outage": "bg-red-100 text-red-800",
-    Unknown: "bg-gray-100 text-gray-800",
+    "Unknown": "bg-blue-100 text-blue-800",
+    "Reported":  "bg-red-100 text-red-800" ,
+    "Investigating": "bg-blue-100 text-blue-800",
+    "Identified": "bg-purple-100 text-purple-800",
+    "Watching": "bg-yellow-100 text-yellow-800" ,
+    "Fixed": "bg-green-100 text-green-800" ,
   };
 
   return (
