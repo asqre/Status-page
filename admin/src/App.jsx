@@ -13,6 +13,7 @@ import {
   setOrganizationDetails,
   setOrganizationId,
 } from "./redux/organizations/organizationSlice";
+import OrganizationPublicPage from "./pages/OrganizationPublicPage";
 
 export default function App() {
   const user = useUser();
@@ -32,6 +33,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/public" element={<OrganizationPublicPage />} />
       </Routes>
 
       <SignedIn>
