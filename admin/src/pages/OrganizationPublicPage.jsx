@@ -13,6 +13,7 @@ import { AlertCircle, ClipboardList, BarChart } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import axios from "@/api/axios";
 import { formatDate } from "@/utils.js";
+import moment from "moment";
 
 const ServiceStatusBadge = ({ status }) => {
   const badgeClasses = {
@@ -40,11 +41,12 @@ const ServiceStatusBadge = ({ status }) => {
 };
 
 const IncidentTimeline = ({ incidents }) => {
-  const [selectedIncident, setSelectedIncident] = useState(null);
-
   const renderTimelineItems = (incident) => {
     return incident.timeline.map((timelineEntry, index) => (
-      <div key={index} className="flex items-start space-x-3 mb-3">
+      <div
+        key={index}
+        className="bg-slate-100 flex items-center space-x-3 mb-1 h-[80px] px-3"
+      >
         <div className="w-3 h-3 bg-primary rounded-full mt-2"></div>
         <div className="flex-1">
           <div className="flex justify-between items-center">
@@ -64,7 +66,7 @@ const IncidentTimeline = ({ incidents }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Timelines</CardTitle>
+        <CardTitle>Past Incidents</CardTitle>
       </CardHeader>
       <CardContent>
         {incidents.length === 0 ? (
@@ -72,25 +74,29 @@ const IncidentTimeline = ({ incidents }) => {
             No incident timelines found
           </p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-8">
             {incidents.map((incident) => (
               <div key={incident._id} className="border rounded-lg p-4">
-                <div
-                  className="flex justify-between items-center cursor-pointer hover:bg-secondary/20 p-2 rounded"
-                  onClick={() =>
-                    setSelectedIncident(
-                      selectedIncident === incident._id ? null : incident._id
-                    )
-                  }
-                >
-                  <div>
-                    <h3 className="font-semibold">{incident.name}</h3>
-                    <ServiceStatusBadge status={incident.status} />
+                <div className="flex justify-between items-center cursor-pointer hover:bg-secondary/20 p-2 rounded">
+                  <div className="w-full">
+                    <h3 className="text-[20px] font-semibold">
+                      {incident.name}
+                    </h3>
+                    <div className="flex flex-row justify-between">
+                      <p className="text-[12px] text-gray-500">
+                        {moment(incident.createdAt).format(
+                          "MMM DD, YYYY, h:mm:ss A"
+                        )}{" "}
+                        -{" "}
+                        {moment(incident.updatedAt).format(
+                          "MMM DD, YYYY, h:mm:ss A"
+                        )}
+                      </p>
+                      <ServiceStatusBadge status={incident.status} />
+                    </div>
                   </div>
                 </div>
-                {selectedIncident === incident._id && (
-                  <div className="mt-4">{renderTimelineItems(incident)}</div>
-                )}
+                <div className="mt-4">{renderTimelineItems(incident)}</div>
               </div>
             ))}
           </div>
