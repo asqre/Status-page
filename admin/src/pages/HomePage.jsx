@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,9 +21,10 @@ const HomePage = () => {
     const checkUserStatus = async () => {
       if (user) {
         try {
-          const hasOrganization = await axios.get(
-            `/organization/check/${user?.id}`
-          );
+          setIsLoading(true);
+          const response = await axios.get(`/organization/check/${user?.id}`);
+
+          const hasOrganization = response.data?.isMember;
 
           if (!hasOrganization) {
             navigate("/onboarding");
@@ -88,7 +89,7 @@ const HomePage = () => {
         </div>
       </main>
 
-      <LoadingOverlay isLoading={isLoading} />
+      <LoadingOverlay isLoading={isLoading || !isLoaded} />
     </div>
   );
 };
