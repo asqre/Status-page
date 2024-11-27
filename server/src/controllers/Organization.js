@@ -211,7 +211,7 @@ export const addOrganizationMember = async (req, res) => {
     const {
       userEmail,
       userName,
-      role = UserRoles.MEMBER,
+      role,
       organization_id,
     } = req.body;
 

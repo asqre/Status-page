@@ -127,6 +127,7 @@ const Setting = () => {
                   value={memberData.role}
                   onChange={handleChange}
                   className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-gray-700"
+                  required
                 >
                   <option value="">Select Role</option>
                   {userRoles.map((roleOption) => (
@@ -163,19 +164,19 @@ const Setting = () => {
               <ul className="divide-y divide-gray-200">
                 {members.map((member) => (
                   <li
-                    key={member.userEmail}
+                    key={member?.userEmail}
                     className="flex justify-between items-center p-4 hover:bg-gray-50 transition-colors"
                   >
                     <div>
                       <div className="font-semibold text-gray-800">
-                        {member.userName}
+                        {member?.userName}
                       </div>
                       <div className="text-gray-500 text-sm">
-                        {member.userEmail}
+                        {member?.userEmail}
                       </div>
                     </div>
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs uppercase">
-                      {member.role.toLowerCase()}
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                      {member?.role.toLowerCase()}
                     </span>
                   </li>
                 ))}
