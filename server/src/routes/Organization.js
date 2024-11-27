@@ -12,7 +12,7 @@ import {
 
 const router = express.Router();
 
-router.get("/check/:userId", checkUserOrganization);
+router.get("/check/user", checkUserOrganization);
 router.post("/", createOrganization);
 router.get("/", getAllOrganizations);
 router.get("/:id", getOrganizationById);

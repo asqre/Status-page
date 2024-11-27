@@ -22,7 +22,9 @@ const HomePage = () => {
       if (user) {
         try {
           setIsLoading(true);
-          const response = await axios.get(`/organization/check/${user?.id}`);
+          const response = await axios.get(
+            `/organization/check/user/?userEmail=${user.primaryEmailAddress.emailAddress}`
+          );
 
           const hasOrganization = response.data?.isMember;
 

@@ -27,7 +27,6 @@ const OnboardingPage = () => {
 
     try {
       const response = await axios.post("/organization", {
-        userId: user.id,
         companyName: companyName,
         slug: subdomain,
         userName: user.fullName,

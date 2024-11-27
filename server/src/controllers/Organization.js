@@ -1,27 +1,42 @@
-import mongoose from "mongoose";
 import organizationModal from "../models/Organization.js";
 import userModel from "../models/Users.js";
 import { UserRoles } from "../data/Enums.js";
 
 export const checkUserOrganization = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userEmail } = req.query;
 
-    if (!userId) {
+    if (!userEmail) {
       return res.status(400).send({
         success: false,
-        message: "User ID is required",
+        message: "User Email is required",
       });
     }
 
-    const organization = await organizationModal.findOne({
-      "members.user": userId,
-    });
+    const user = await userModel.findOne({ userEmail });
+
+    if (!user) {
+      return res.status(200).send({
+        success: true,
+        message: "Organization check successful",
+        isMember: false,
+        organization: null,
+      });
+    }
+
+    const organization = await organizationModal.findById(user.organization_id);
 
     res.status(200).send({
       success: true,
       message: "Organization check successful",
       isMember: !!organization,
+      organization: organization
+        ? {
+            id: organization._id,
+            companyName: organization.companyName,
+            slug: organization.slug,
+          }
+        : null,
     });
   } catch (error) {
     res.status(500).send({
@@ -34,13 +49,12 @@ export const checkUserOrganization = async (req, res) => {
 
 export const createOrganization = async (req, res) => {
   try {
-    const { userId, companyName, slug, userEmail, userName } = req.body;
+    const { companyName, slug, userEmail, userName } = req.body;
 
-    if ((!userId && (!userEmail || !userName)) || !companyName || !slug) {
+    if (!companyName || !slug || !userEmail || !userName) {
       return res.status(400).send({
         success: false,
-        message:
-          "Invalid input. Provide either existing user ID or new user details",
+        message: "Invalid input. Provide all required details",
       });
     }
 
@@ -60,18 +74,25 @@ export const createOrganization = async (req, res) => {
       });
     }
 
+    const existingOrganization = await organizationModal.findOne({ slug });
+    if (existingOrganization) {
+      return res.status(409).send({
+        success: false,
+        message: "Subdomain is already taken",
+      });
+    }
+
     const user = new userModel({
       userName: userName,
       userEmail: userEmail,
       role: UserRoles.OWNER,
+      password: process.env.DEFAULT_PASSWORD,
     });
-
-    await user.save();
 
     const organization = new organizationModal({
       companyName,
       slug,
-      members: [{ user: userId, role: UserRoles.OWNER, user_id: user._id }],
+      members: [{ user: userName, role: UserRoles.OWNER, user_id: user._id }],
     });
 
     const savedOrganization = await organization.save();
@@ -208,12 +229,7 @@ export const deleteOrganization = async (req, res) => {
 
 export const addOrganizationMember = async (req, res) => {
   try {
-    const {
-      userEmail,
-      userName,
-      role,
-      organization_id,
-    } = req.body;
+    const { userEmail, userName, role, organization_id } = req.body;
 
     let user = await userModel.findOne({ userEmail });
 
