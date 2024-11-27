@@ -3,8 +3,8 @@ import { UserRoles } from "../data/Enums.js";
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },
-    email: {
+    userName: { type: String, required: true, trim: true },
+    userEmail: {
       type: String,
       required: true,
       unique: true,
@@ -13,19 +13,17 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
     role: {
       type: String,
       enum: Object.values(UserRoles),
       default: UserRoles.MEMBER,
     },
-    organizations: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Organization",
-      },
-    ],
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+    },
   },
   { timestamps: true }
 );

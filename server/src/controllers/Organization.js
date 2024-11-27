@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import organizationModal from "../models/Organization.js";
+import userModel from "../models/Users.js";
+import { UserRoles } from "../data/Enums.js";
 
 export const checkUserOrganization = async (req, res) => {
   try {
@@ -32,12 +34,13 @@ export const checkUserOrganization = async (req, res) => {
 
 export const createOrganization = async (req, res) => {
   try {
-    const { userId, name, slug } = req.body;
+    const { userId, companyName, slug, userEmail, userName } = req.body;
 
-    if (!userId || !name || !slug) {
+    if ((!userId && (!userEmail || !userName)) || !companyName || !slug) {
       return res.status(400).send({
         success: false,
-        message: "User ID, organization name, and slug are required",
+        message:
+          "Invalid input. Provide either existing user ID or new user details",
       });
     }
 
@@ -49,13 +52,32 @@ export const createOrganization = async (req, res) => {
       });
     }
 
+    const existingUser = await userModel.findOne({ userEmail });
+    if (existingUser) {
+      return res.status(409).send({
+        success: false,
+        message: "User already a part of other organization",
+      });
+    }
+
+    const user = new userModel({
+      userName: userName,
+      userEmail: userEmail,
+      role: UserRoles.OWNER,
+    });
+
+    await user.save();
+
     const organization = new organizationModal({
-      name,
+      companyName,
       slug,
-      members: [{ user: userId, role: "OWNER" }],
+      members: [{ user: userId, role: UserRoles.OWNER }],
     });
 
     const savedOrganization = await organization.save();
+
+    user.organization = savedOrganization._id;
+    await user.save();
 
     res.status(201).send({
       success: true,

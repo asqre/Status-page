@@ -3,7 +3,7 @@ import { UserRoles } from "../data/Enums.js";
 
 const OrganizationSchema = new mongoose.Schema(
   {
-    name: {
+    companyName: {
       type: String,
       required: true,
       trim: true,
@@ -19,7 +19,7 @@ const OrganizationSchema = new mongoose.Schema(
       {
         user: {
           type: String,
-          ref: "User",
+          ref: "Users",
         },
         role: {
           type: String,
