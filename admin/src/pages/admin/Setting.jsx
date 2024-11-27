@@ -23,9 +23,8 @@ import Layout from "@/components/layout/Layout";
 
 const Setting = () => {
   const [copied, setCopied] = useState(false);
-  const { organizationDetails, memberData, members, isLoading } = useSelector(
-    (state) => state.organizations
-  );
+  const { organizationDetails, memberData, members, isLoading, error } =
+    useSelector((state) => state.organizations);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -143,6 +142,7 @@ const Setting = () => {
                 >
                   {isLoading ? "Adding..." : "Add Member"}
                 </Button>
+                <p className="text-red-600 ">{error}</p>
               </form>
             </CardContent>
           </Card>
