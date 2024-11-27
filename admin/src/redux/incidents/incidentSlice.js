@@ -3,9 +3,12 @@ import axios from "@/api/axios";
 
 export const fetchIncidents = createAsyncThunk(
   "incidents/fetchIncidents",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      const response = await axios.get("/incident");
+      const { organization_id } = getState().organizations;
+      const response = await axios.get(
+        `/incident/?organization_id=${organization_id}`
+      );
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -15,9 +18,13 @@ export const fetchIncidents = createAsyncThunk(
 
 export const addIncident = createAsyncThunk(
   "incidents/addIncident",
-  async (incidentData, { rejectWithValue }) => {
+  async (incidentData, { rejectWithValue, getState }) => {
     try {
-      const response = await axios.post("/incident", incidentData);
+      const { organization_id } = getState().organizations;
+      const response = await axios.post("/incident", {
+        ...incidentData,
+        organization_id,
+      });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -68,7 +75,6 @@ const initialState = {
   incidents: [],
   isLoading: false,
   incidentData: {
-    organization_id: "1",
     name: "",
     status: "",
     message: "",
@@ -108,7 +114,7 @@ const incidentSlice = createSlice({
     });
     builder.addCase(fetchIncidents.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.payload;
+      // state.error = action.payload;
     });
 
     // Add Incidents
@@ -166,6 +172,7 @@ const incidentSlice = createSlice({
       state.error = null;
     });
     builder.addCase(addTimelineEntry.fulfilled, (state, action) => {
+      state.isLoading = false;
       const index = state.incidents.findIndex(
         (incident) => incident._id === action.payload._id
       );

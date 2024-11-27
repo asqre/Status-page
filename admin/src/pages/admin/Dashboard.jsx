@@ -1,7 +1,10 @@
 import Layout from "@/components/layout/Layout";
 import React from "react";
+import { useUser } from "@clerk/clerk-react";
 
 const Dashboard = () => {
+  const user = useUser();
+
   return (
     <Layout>
       <div className="min-h-screen bg-purple-50 flex flex-col items-center justify-center">
@@ -10,7 +13,7 @@ const Dashboard = () => {
             Dashboard
           </h1>
           <p className="text-lg mb-6 font-bold text-purple-800 capitalize">
-            Hello {user ? user.username : user.fisrtName}!
+            Hello {user && user.user.fullName}!
           </p>
           <p>
             {" "}

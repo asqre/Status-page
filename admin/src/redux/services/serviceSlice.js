@@ -3,9 +3,12 @@ import axios from "@/api/axios";
 
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      const response = await axios.get("/service");
+      const { organization_id } = getState().organizations;
+      const response = await axios.get(
+        `/service/?organization_id=${organization_id}`
+      );
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -92,7 +95,7 @@ const serviceSlice = createSlice({
     });
     builder.addCase(fetchServices.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.payload;
+      // state.error = action.payload;
     });
 
     // Add service
