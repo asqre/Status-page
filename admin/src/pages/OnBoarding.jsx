@@ -4,6 +4,11 @@ import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import LoadingOverlay from "@/components/common/LoadingOverlay";
 import axios from "@/api/axios";
+import { useDispatch } from "react-redux";
+import {
+  setOrganizationDetails,
+  setOrganizationId,
+} from "@/redux/organizations/organizationSlice";
 
 const OnboardingPage = () => {
   const { user, isLoaded } = useUser();
@@ -11,6 +16,7 @@ const OnboardingPage = () => {
   const [companyName, setCompanyName] = useState("");
   const [subdomain, setSubdomain] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,9 +39,14 @@ const OnboardingPage = () => {
         userEmail: user.primaryEmailAddress.emailAddress,
       });
 
+      const organizationDetails = response.data.data;
+
+      dispatch(setOrganizationDetails(organizationDetails));
+      dispatch(setOrganizationId(organizationDetails.id));
+
       sessionStorage.setItem(
         "organization",
-        JSON.stringify(response.data.data)
+        JSON.stringify(organizationDetails)
       );
 
       navigate("/dashboard");

@@ -2,6 +2,10 @@ import axios from "@/api/axios";
 import LoadingOverlay from "@/components/common/LoadingOverlay";
 import { Button } from "@/components/ui/button";
 import {
+  setOrganizationDetails,
+  setOrganizationId,
+} from "@/redux/organizations/organizationSlice";
+import {
   SignedIn,
   SignedOut,
   SignInButton,
@@ -10,12 +14,14 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const { user, isLoaded } = useUser();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const checkUserStatus = async () => {
@@ -31,9 +37,14 @@ const HomePage = () => {
           if (!hasOrganization) {
             navigate("/onboarding");
           } else {
+            const organizationDetails = response.data.organization;
+
+            dispatch(setOrganizationDetails(organizationDetails));
+            dispatch(setOrganizationId(organizationDetails.id));
+
             sessionStorage.setItem(
               "organization",
-              JSON.stringify(response.data.organization)
+              JSON.stringify(organizationDetails)
             );
 
             navigate("/dashboard");
