@@ -9,7 +9,10 @@ import Setting from "./pages/admin/Setting";
 import OnboardingPage from "./pages/OnBoarding";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setOrganizationId } from "./redux/organizations/organizationSlice";
+import {
+  setOrganizationDetails,
+  setOrganizationId,
+} from "./redux/organizations/organizationSlice";
 
 export default function App() {
   const user = useUser();
@@ -17,6 +20,8 @@ export default function App() {
 
   useEffect(() => {
     if (user) {
+      const organizationDetails = user?.user?.unsafeMetadata;
+      dispatch(setOrganizationDetails(organizationDetails));
       const organization_id = user?.user?.unsafeMetadata?.organization_id;
       dispatch(setOrganizationId(organization_id));
     }

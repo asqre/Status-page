@@ -38,6 +38,7 @@ const OnboardingPage = () => {
 
       await user.update({
         unsafeMetadata: {
+          ...response.data.data,
           organization_id: organization_id,
         },
       });

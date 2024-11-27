@@ -6,7 +6,6 @@ import {
   Component,
   InfoIcon,
 } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +16,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 // Menu items.
 const items = [
@@ -49,18 +49,43 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { organizationDetails } = useSelector((state) => state.organizations);
+  const location = useLocation();
+
   return (
     <Sidebar>
       <SidebarContent>
+        {/* Organization Header */}
+        <div className="flex items-center p-4 border-b border-gray-700">
+          <div className="flex items-center gap-2">
+            <div className="bg-primary w-10 h-10 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-2xl">
+                {organizationDetails?.companyName?.[0] || "O"}
+              </span>
+            </div>
+            <span className="font-semibold text-lg text-black">
+              {organizationDetails?.companyName || "Organization"}
+            </span>
+          </div>
+        </div>
+
+        {/* Menu Items */}
         <SidebarGroup>
-          <SidebarGroupLabel>Organization Name</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem
+                  key={item.title}
+                  className={`flex items-center gap-3 p-3 rounded-lg transition-all
+                    ${
+                      location.pathname === item.url
+                        ? "bg-primary text-white font-bold"
+                        : "hover:bg-gray-800 text-black"
+                    }`}
+                >
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
+                    <Link to={item.url} className="flex items-center gap-3">
+                      <item.icon className="w-5 h-5" />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -70,6 +95,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Footer */}
+      <div className="absolute bottom-0 w-full p-4 text-center text-xs border-t border-gray-700">
+        <span>&copy; {new Date().getFullYear()} Organization</span>
+      </div>
     </Sidebar>
   );
 }

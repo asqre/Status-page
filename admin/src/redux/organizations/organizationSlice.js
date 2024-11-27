@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   organization_id: null,
+  organizationDetails: {},
 };
 
 const organizationSlice = createSlice({
@@ -11,13 +12,19 @@ const organizationSlice = createSlice({
     setOrganizationId: (state, action) => {
       state.organization_id = action.payload;
     },
+    setOrganizationDetails: (state, action) => {
+      state.organizationDetails = action.payload;
+    },
     clearOrganizationId: (state) => {
       state.organization_id = null;
     },
   },
 });
 
-export const { setOrganizationId, clearOrganizationId } =
-  organizationSlice.actions;
+export const {
+  setOrganizationId,
+  setOrganizationDetails,
+  clearOrganizationId,
+} = organizationSlice.actions;
 
 export default organizationSlice.reducer;
