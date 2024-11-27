@@ -54,7 +54,7 @@ const Setting = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto p-6 max-w-4xl">
+      <div className="container mx-auto p-6 max-w-4xl overflow-auto h-[95vh] hide-scrollbar">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 flex items-center">
             <LuUsers className="mr-3 text-blue-600" />
@@ -162,9 +162,9 @@ const Setting = () => {
               </div>
             ) : (
               <ul className="divide-y divide-gray-200">
-                {members.map((member) => (
+                {members.map((member, index) => (
                   <li
-                    key={member?.userEmail}
+                    key={index}
                     className="flex justify-between items-center p-4 hover:bg-gray-50 transition-colors"
                   >
                     <div>
