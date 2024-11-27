@@ -71,12 +71,12 @@ export const createOrganization = async (req, res) => {
     const organization = new organizationModal({
       companyName,
       slug,
-      members: [{ user: userId, role: UserRoles.OWNER }],
+      members: [{ user: userId, role: UserRoles.OWNER, user_id: user._id }],
     });
 
     const savedOrganization = await organization.save();
 
-    user.organization = savedOrganization._id;
+    user.organization_id = savedOrganization._id;
     await user.save();
 
     res.status(201).send({

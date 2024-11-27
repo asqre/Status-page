@@ -25,12 +25,22 @@ const OrganizationSchema = new mongoose.Schema(
           type: String,
           enum: Object.values(UserRoles),
         },
+        user_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Users",
+        },
       },
     ],
     services: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Service",
+        ref: "Services",
+      },
+    ],
+    incidents: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Incidents",
       },
     ],
   },
@@ -39,4 +49,4 @@ const OrganizationSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Organization", OrganizationSchema);
+export default mongoose.model("Organizations", OrganizationSchema);

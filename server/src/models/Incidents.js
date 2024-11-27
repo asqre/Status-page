@@ -28,10 +28,9 @@ const incidentSchema = new mongoose.Schema(
       default: "Reported",
       enum: ["Reported", "Investigating", "Identified", "Watching", "Fixed"],
     },
-    tenant_id: {
-      type: Number,
-      required: true,
-      index: true,
+    organization_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organizations",
     },
     timeline: [timelineSchema],
   },

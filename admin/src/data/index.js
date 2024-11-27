@@ -30,7 +30,7 @@ export const incidentStatus = [
 export const services = [
   {
     id: 1,
-    tenant_id: 101,
+    organization_id: 101,
     name: "Website",
     description: "Main company website hosting and management.",
     status: "Operational",
@@ -39,7 +39,7 @@ export const services = [
   },
   {
     id: 2,
-    tenant_id: 101,
+    organization_id: 101,
     name: "API",
     description: "RESTful API for integration with third-party apps.",
     status: "Performance Issues",
@@ -48,7 +48,7 @@ export const services = [
   },
   {
     id: 3,
-    tenant_id: 102,
+    organization_id: 102,
     name: "Email Service",
     description: "SMTP service for transactional and marketing emails.",
     status: "Partial Outage",
@@ -57,7 +57,7 @@ export const services = [
   },
   {
     id: 4,
-    tenant_id: 103,
+    organization_id: 103,
     name: "File Storage",
     description: "Cloud file storage and backup system.",
     status: "Operational",
@@ -66,7 +66,7 @@ export const services = [
   },
   {
     id: 5,
-    tenant_id: 101,
+    organization_id: 101,
     name: "Payment Gateway",
     description: "Service for processing online payments securely.",
     status: "Major Outage",
@@ -75,7 +75,7 @@ export const services = [
   },
   {
     id: 6,
-    tenant_id: 104,
+    organization_id: 104,
     name: "Unknown",
     description: "Platform for monitoring website and app metrics.",
     status: "Operational",

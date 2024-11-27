@@ -20,9 +20,9 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(UserRoles),
       default: UserRoles.MEMBER,
     },
-    organization: {
+    organization_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
+      ref: "Organizations",
     },
   },
   { timestamps: true }

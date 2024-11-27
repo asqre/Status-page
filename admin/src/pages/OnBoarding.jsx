@@ -4,6 +4,8 @@ import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import LoadingOverlay from "@/components/common/LoadingOverlay";
 import axios from "@/api/axios";
+import { useDispatch } from "react-redux";
+import { setOrganizationId } from "@/redux/organizations/organizationSlice";
 
 const OnboardingPage = () => {
   const { user, isLoaded } = useUser();
@@ -11,6 +13,7 @@ const OnboardingPage = () => {
   const [companyName, setCompanyName] = useState("");
   const [subdomain, setSubdomain] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,10 +37,20 @@ const OnboardingPage = () => {
         userEmail: user.primaryEmailAddress.emailAddress,
       });
 
+      const organizationId = response.data.data._id;
+
+      dispatch(setOrganizationId(organizationId));
+
+      await user.update({
+        unsafeMetadata: {
+          organizationId: organizationId,
+        },
+      });
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Onboarding error:", error);
-      setError(error?.data?.message);
+      setError(error?.response?.data?.message || "An error occurred");
     }
   };
 
@@ -85,6 +98,7 @@ const OnboardingPage = () => {
             Complete Onboarding
           </Button>
         </form>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
       <LoadingOverlay isLoading={!isLoaded} />
     </div>

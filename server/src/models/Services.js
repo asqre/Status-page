@@ -15,10 +15,9 @@ const serviceSchema = new mongoose.Schema(
         "Unknown",
       ],
     },
-    tenant_id: {
-      type: Number,
-      required: true,
-      index: true,
+    organization_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organizations",
     },
   },
   { timestamps: true }

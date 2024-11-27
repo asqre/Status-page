@@ -2,12 +2,12 @@ import serviceModel from "../models/Services.js";
 
 export const createService = async (req, res) => {
   try {
-    const { name, tenant_id } = req.body;
+    const { name, organization_id } = req.body;
 
-    if (!tenant_id) {
+    if (!organization_id) {
       return res.status(400).send({
         success: false,
-        message: "tenand_id is required",
+        message: "organization_id is required",
       });
     }
 
@@ -38,8 +38,8 @@ export const createService = async (req, res) => {
 
 export const getAllServices = async (req, res) => {
   try {
-    const { tenant_id } = req.query;
-    const query = tenant_id ? { tenant_id } : {};
+    const { organization_id } = req.query;
+    const query = organization_id ? { organization_id } : {};
 
     const services = await serviceModel.find(query);
     res.status(200).send({

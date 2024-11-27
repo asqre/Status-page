@@ -68,7 +68,7 @@ const initialState = {
   incidents: [],
   isLoading: false,
   incidentData: {
-    tenant_id: "1",
+    organization_id: "1",
     name: "",
     status: "",
     message: "",

@@ -15,9 +15,13 @@ export const fetchServices = createAsyncThunk(
 
 export const addService = createAsyncThunk(
   "services/addService",
-  async (serviceData, { rejectWithValue }) => {
+  async (serviceData, { rejectWithValue, getState }) => {
     try {
-      const response = await axios.post("/service", serviceData);
+      const { organization_id } = getState().organizations;
+      const response = await axios.post("/service", {
+        ...serviceData,
+        organization_id,
+      });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -53,7 +57,7 @@ const initialState = {
   services: [],
   isLoading: false,
   serviceData: {
-    tenant_id: "1",
+    // organization_id: organization_id,
     name: "",
     status: "",
     description: "",
