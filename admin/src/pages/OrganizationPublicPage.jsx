@@ -12,6 +12,7 @@ import {
 import { AlertCircle, ClipboardList, BarChart } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import axios from "@/api/axios";
+import { formatDate } from "@/utils.js";
 
 const ServiceStatusBadge = ({ status }) => {
   const badgeClasses = {
@@ -149,7 +150,7 @@ const OrganizationDashboard = () => {
         <BarChart className="mr-3" /> Organizational Services Dashboard
       </h1>
 
-      <Card className="w-full">
+      <Card className="w-full mb-10">
         <Tabs
           defaultValue="services"
           value={activeTab}
@@ -179,7 +180,7 @@ const OrganizationDashboard = () => {
                       <TableHead>Service Name</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Description</TableHead>
-                      <TableHead>Created At</TableHead>
+                      <TableHead>Last Updated</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -190,9 +191,7 @@ const OrganizationDashboard = () => {
                           <ServiceStatusBadge status={service.status} />
                         </TableCell>
                         <TableCell>{service.description || "N/A"}</TableCell>
-                        <TableCell>
-                          {new Date(service.createdAt).toLocaleString()}
-                        </TableCell>
+                        <TableCell>{formatDate(service.updatedAt)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -209,25 +208,23 @@ const OrganizationDashboard = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Incident ID</TableHead>
-                      <TableHead>Service</TableHead>
-                      <TableHead>Description</TableHead>
+                      <TableHead>Incident Name</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Created At</TableHead>
+                      <TableHead>Message</TableHead>
+                      <TableHead>created At</TableHead>
+                      <TableHead>Last Updated</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {incidents.map((incident) => (
                       <TableRow key={incident._id}>
-                        <TableCell>{incident._id}</TableCell>
-                        <TableCell>{incident.service?.name || "N/A"}</TableCell>
-                        <TableCell>{incident.description}</TableCell>
+                        <TableCell>{incident.name}</TableCell>
                         <TableCell>
                           <ServiceStatusBadge status={incident.status} />
                         </TableCell>
-                        <TableCell>
-                          {new Date(incident.createdAt).toLocaleString()}
-                        </TableCell>
+                        <TableCell>{incident.message || "N/A"}</TableCell>
+                        <TableCell>{formatDate(incident.createdAt)}</TableCell>
+                        <TableCell>{formatDate(incident.updatedAt)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
