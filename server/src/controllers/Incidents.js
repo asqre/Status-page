@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import incidentModel from "../models/Incidents.js";
+import organizationModel from "../models/Organization.js";
 
 export const createIncident = async (req, res) => {
   try {
@@ -21,6 +23,19 @@ export const createIncident = async (req, res) => {
     const incident = new incidentModel({ ...req.body });
 
     const savedIncident = await incident.save();
+
+    const organization = await organizationModel.findByIdAndUpdate(
+      organization_id,
+      { $push: { incidents: savedIncident._id } },
+      { new: true }
+    );
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
 
     res.status(201).send({
       success: true,
@@ -112,19 +127,39 @@ export const updateIncident = async (req, res) => {
 };
 
 export const deleteIncident = async (req, res) => {
+  const session = await mongoose.startSession();
   try {
-    const incident = await incidentModel.findByIdAndDelete(req.params.id);
+    session.startTransaction();
+
+    const incident = await incidentModel.findById(req.params.id);
 
     if (!incident) {
-      return res
-        .status(404)
-        .send({ success: false, message: "Incident not found" });
+      return res.status(404).send({
+        success: false,
+        message: "Incident not found",
+      });
     }
+
+    const organization = await organizationModel.findOneAndUpdate(
+      { _id: incident.organization_id },
+      { $pull: { incidents: incident._id } },
+      { session, new: true }
+    );
+
+    const deletedIncident = await incidentModel.findByIdAndDelete(
+      req.params.id,
+      {
+        session,
+      }
+    );
+
+    await session.commitTransaction();
 
     res.status(200).send({
       success: true,
       message: "Incident deleted successfully",
-      deletedIncident: incident,
+      deletedIncident: deletedIncident,
+      updatedOrganization: organization,
     });
   } catch (error) {
     res.status(500).send({
@@ -175,6 +210,45 @@ export const addTimelineEntry = async (req, res) => {
     res.status(400).send({
       success: false,
       message: "Failed to add timeline entry",
+      error: error.message,
+    });
+  }
+};
+
+export const getIncidentsByOrganizationSlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const organization = await organizationModel.findOne({ slug }).populate({
+      path: "incidents",
+      model: "Incidents",
+      select: "-__v",
+    });
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    if (!organization.incidents || organization.incidents.length === 0) {
+      return res.status(200).send({
+        success: true,
+        message: "No incidents found for this organization",
+        data: [],
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Incidents fetched successfully",
+      data: organization.incidents,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error fetching incidents",
       error: error.message,
     });
   }

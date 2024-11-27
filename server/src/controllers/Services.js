@@ -1,4 +1,6 @@
 import serviceModel from "../models/Services.js";
+import organizationModel from "../models/Organization.js";
+import mongoose from "mongoose";
 
 export const createService = async (req, res) => {
   try {
@@ -21,6 +23,19 @@ export const createService = async (req, res) => {
     const service = new serviceModel({ ...req.body });
 
     const savedService = await service.save();
+
+    const organization = await organizationModel.findByIdAndUpdate(
+      organization_id,
+      { $push: { services: savedService._id } },
+      { new: true }
+    );
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
 
     res.status(201).send({
       success: true,
@@ -112,24 +127,80 @@ export const updateService = async (req, res) => {
 };
 
 export const deleteService = async (req, res) => {
+  const session = await mongoose.startSession();
   try {
-    const service = await serviceModel.findByIdAndDelete(req.params.id);
+    session.startTransaction();
+
+    const service = await serviceModel.findById(req.params.id);
 
     if (!service) {
-      return res
-        .status(404)
-        .send({ success: false, message: "Service not found" });
+      return res.status(404).send({
+        success: false,
+        message: "Service not found",
+      });
     }
+
+    const organization = await organizationModel.findOneAndUpdate(
+      { _id: service.organization_id },
+      { $pull: { services: service._id } },
+      { session, new: true }
+    );
+
+    const deletedService = await serviceModel.findByIdAndDelete(req.params.id, {
+      session,
+    });
+
+    await session.commitTransaction();
 
     res.status(200).send({
       success: true,
       message: "Service deleted successfully",
-      deletedService: service,
+      deletedService: deletedService,
+      updatedOrganization: organization,
     });
   } catch (error) {
     res.status(500).send({
       success: false,
       message: "Error deleting service",
+      error: error.message,
+    });
+  }
+};
+
+export const getServicesByOrganizationSlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const organization = await organizationModel.findOne({ slug }).populate({
+      path: "services",
+      model: "Services",
+      select: "-__v",
+    });
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    if (!organization.services || organization.services.length === 0) {
+      return res.status(200).send({
+        success: true,
+        message: "No services found for this organization",
+        data: [],
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Services fetched successfully",
+      data: organization.services,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error fetching services",
       error: error.message,
     });
   }

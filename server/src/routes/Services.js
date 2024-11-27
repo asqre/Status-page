@@ -5,6 +5,7 @@ import {
   getServiceById,
   updateService,
   deleteService,
+  getServicesByOrganizationSlug,
 } from "../controllers/Services.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get("/", getAllServices);
 router.get("/:id", getServiceById);
 router.put("/:id", updateService);
 router.delete("/:id", deleteService);
+router.get('/:slug/service', getServicesByOrganizationSlug);
 
 export default router;
