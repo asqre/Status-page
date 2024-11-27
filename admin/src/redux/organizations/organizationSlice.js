@@ -86,11 +86,11 @@ const organizationSlice = createSlice({
     });
 
     // add Member
-    builder.addCase(addMember.pending, (state) => {
+    builder.addCase(addMember.pending, (state, action) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(addMember.fulfilled, (state) => {
+    builder.addCase(addMember.fulfilled, (state, action) => {
       state.isLoading = false;
       state.members.push(action.payload);
     });

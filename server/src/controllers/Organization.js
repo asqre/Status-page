@@ -208,9 +208,12 @@ export const deleteOrganization = async (req, res) => {
 
 export const addOrganizationMember = async (req, res) => {
   try {
-    const { userEmail, userName, role = UserRoles.MEMBER } = req.body;
-
-    const { organization_id } = req.user;
+    const {
+      userEmail,
+      userName,
+      role = UserRoles.MEMBER,
+      organization_id,
+    } = req.body;
 
     let user = await userModel.findOne({ userEmail });
 
