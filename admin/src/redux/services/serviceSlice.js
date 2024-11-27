@@ -57,7 +57,6 @@ const initialState = {
   services: [],
   isLoading: false,
   serviceData: {
-    // organization_id: organization_id,
     name: "",
     status: "",
     description: "",
