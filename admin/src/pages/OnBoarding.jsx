@@ -37,13 +37,13 @@ const OnboardingPage = () => {
         userEmail: user.primaryEmailAddress.emailAddress,
       });
 
-      const organizationId = response.data.data._id;
+      const organization_id = response.data.data._id;
 
-      dispatch(setOrganizationId(organizationId));
+      dispatch(setOrganizationId(organization_id));
 
       await user.update({
         unsafeMetadata: {
-          organizationId: organizationId,
+          organization_id: organization_id,
         },
       });
 
