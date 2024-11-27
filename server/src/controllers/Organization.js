@@ -205,3 +205,111 @@ export const deleteOrganization = async (req, res) => {
     });
   }
 };
+
+export const addOrganizationMember = async (req, res) => {
+  try {
+    const { userEmail, userName, role = UserRoles.MEMBER } = req.body;
+
+    const { organization_id } = req.user;
+
+    let user = await userModel.findOne({ userEmail });
+
+    if (!user) {
+      user = new userModel({
+        userName,
+        userEmail,
+        password: process.env.DEFAULT_PASSWORD,
+        role,
+        organization_id,
+      });
+
+      await user.save();
+    }
+
+    const organization = await organizationModal.findById(organization_id);
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    const existingMember = organization.members.find(
+      (member) => member.user_id.toString() === user._id.toString()
+    );
+
+    if (existingMember) {
+      return res.status(400).send({
+        success: false,
+        message: "User is already a member",
+      });
+    }
+
+    organization.members.push({
+      user: user.userName,
+      role: role,
+      user_id: user._id,
+    });
+
+    await organization.save();
+
+    res.status(201).send({
+      success: true,
+      message: "Member added successfully",
+      member: {
+        user_id: user._id,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        role: role,
+      },
+    });
+  } catch (error) {
+    console.error("Error adding organization member:", error);
+    res.status(500).send({
+      success: fasle,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+export const fetchAllMembers = async (req, res) => {
+  try {
+    const { organization_id } = req.params;
+
+    const organization = await organizationModal
+      .findById(organization_id)
+      .populate({
+        path: "members.user_id",
+        model: "Users",
+        select: "userName userEmail role", // Select only necessary fields
+      });
+
+    if (!organization) {
+      return res.status(404).send({
+        success: false,
+        message: "Organization not found",
+      });
+    }
+
+    const members = organization.members.map((member) => ({
+      userName: member.user_id.userName,
+      userEmail: member.user_id.userEmail,
+      role: member.role,
+    }));
+
+    res.status(200).send({
+      success: true,
+      message: "Members fetched successfully",
+      data: members,
+    });
+  } catch (error) {
+    console.error("Error fetching organization members:", error);
+    res.status(500).send({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};

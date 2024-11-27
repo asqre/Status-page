@@ -26,3 +26,10 @@ export const incidentStatus = [
   { name: "Watching", icon: Eye, color: "yellow" },
   { name: "Fixed", icon: CheckCircle, color: "green" },
 ];
+
+export const userRoles = [
+  { label: "owner", value: "OWNER" },
+  { label: "admin", value: "ADMIN" },
+  { label: "member", value: "MEMBER" },
+  { label: "viewer", value: "VIEWER" },
+];

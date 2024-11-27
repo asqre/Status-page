@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema(
     organization_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Organizations",
+      required: true,
     },
   },
   { timestamps: true }

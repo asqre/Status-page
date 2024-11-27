@@ -1,14 +1,45 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Layout from "@/components/layout/Layout";
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
-import axios from "@/api/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { userRoles } from "@/data";
+import {
+  addMember,
+  fetchMembers,
+  resetMemberData,
+  setMemberData,
+} from "@/redux/organizations/organizationSlice";
+import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const Setting = () => {
   const [copied, setCopied] = useState(false);
-  const { organizationDetails } = useSelector((state) => state.organizations);
+  const { organizationDetails, memberData, members, isLoading } = useSelector(
+    (state) => state.organizations
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchMembers());
+  }, [dispatch]);
+
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+
+    try {
+      dispatch(addMember(memberData));
+      dispatch(resetMemberData());
+    } catch (error) {
+      console.error("Failed to add member :", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    dispatch(setMemberData({ [id]: value }));
+  };
 
   return (
     <Layout>
@@ -37,59 +68,63 @@ const Setting = () => {
           </div>
         </div>
 
-        {/* Add Member */}
-        {/* <div className="mt-8">
-          <h2 className="text-xl font-bold">Add Member</h2>
-          <div className="flex gap-4 mt-4">
-            <input
-              type="text"
-              placeholder="Member Name"
-              value={newMember.user}
-              onChange={(e) =>
-                setNewMember({ ...newMember, user: e.target.value })
-              }
-              className="border rounded p-2 flex-grow"
-            />
-            <input
-              type="text"
-              placeholder="Role"
-              value={newMember.role}
-              onChange={(e) =>
-                setNewMember({ ...newMember, role: e.target.value })
-              }
-              className="border rounded p-2 flex-grow"
-            />
-            <input
-              type="text"
-              placeholder="User ID"
-              value={newMember.user_id}
-              onChange={(e) =>
-                setNewMember({ ...newMember, user_id: e.target.value })
-              }
-              className="border rounded p-2 flex-grow"
-            />
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-              onClick={addMember}
-            >
-              Add
-            </button>
-          </div>
-        </div> */}
+        <form onSubmit={handleAddMember} className="space-y-4 mb-6">
+          <Input
+            id="userEmail"
+            type="email"
+            placeholder="Member Email"
+            value={memberData.userEmail}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            id="userName"
+            type="text"
+            placeholder="Member Name"
+            value={memberData.userName}
+            onChange={handleChange}
+            required
+          />
+          <select
+            id="role"
+            value={memberData.role}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">Select Role</option>
+            {userRoles.map((roleOption) => (
+              <option key={roleOption.value} value={roleOption.value}>
+                {roleOption.label}
+              </option>
+            ))}
+          </select>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Adding..." : "Add Member"}
+          </Button>
+        </form>
 
         {/* Member List */}
-        <div className="mt-8">
-          <h2 className="text-xl font-bold">Members</h2>
-          <ul className="mt-4">
-            {/* {members.map((member) => (
-            <li key={member.user_id} className="flex justify-between p-2 border rounded mb-2">
-              <span>{member.user}</span>
-              <span className="text-gray-500">{member.role}</span>
-            </li>
-          ))} */}
+        <div>
+          <h2 className="text-xl font-bold mb-4">Members</h2>
+          <ul className="space-y-2">
+            {members.map((member) => (
+              <li
+                key={member._id}
+                className="flex justify-between p-2 border rounded"
+              >
+                <div>
+                  <span className="font-medium">{member.userName}</span>
+                  <span className="text-gray-500 ml-2">{member.userEmail}</span>
+                </div>
+                <span className="text-gray-600 capitalize">
+                  {member.role.toLowerCase()}
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
+      <LoadingOverlay isLoading={isLoading} />
     </Layout>
   );
 };
