@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import axios from "@/api/axios";
 import { formatDate } from "@/utils.js";
 import moment from "moment";
+import io from "socket.io-client";
 
 const ServiceStatusBadge = ({ status }) => {
   const badgeClasses = {
@@ -106,30 +107,77 @@ const IncidentTimeline = ({ incidents }) => {
   );
 };
 
-const OrganizationDashboard = () => {
+const OrganizationPublicPage = () => {
   const [activeTab, setActiveTab] = useState("services");
   const [services, setServices] = useState([]);
   const [incidents, setIncidents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-
   const slug = location.pathname.split("/")[2];
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:8000");
+
+    newSocket.on("connect", () => {
+      console.log("Connected to server:", newSocket.id);
+    });
+
+    newSocket.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+    });
+
+    setSocket(newSocket);
+
+    newSocket.on("serviceAdded", (service) => {
+      setServices((prevServices) => [...prevServices, service]);
+    });
+
+    newSocket.on("serviceUpdated", (updatedService) => {
+      setServices((prevServices) =>
+        prevServices.map((service) =>
+          service._id === updatedService._id ? updatedService : service
+        )
+      );
+    });
+
+    newSocket.on("serviceDeleted", (serviceId) => {
+      setServices((prevServices) =>
+        prevServices.filter((service) => service._id !== serviceId)
+      );
+    });
+
+    newSocket.on("incidentAdded", (incident) => {
+      setIncidents((prevIncidents) => [...prevIncidents, incident]);
+    });
+
+    newSocket.on("incidentUpdated", (updatedIncident) => {
+      setIncidents((prevIncidents) =>
+        prevIncidents.map((incident) =>
+          incident._id === updatedIncident._id ? updatedIncident : incident
+        )
+      );
+    });
+
+    newSocket.on("incidentDeleted", (incidentId) => {
+      setIncidents((prevIncidents) =>
+        prevIncidents.filter((incident) => incident._id !== incidentId)
+      );
+    });
+
+    return () => newSocket.close();
+  }, []);
 
   useEffect(() => {
     const fetchOrganizationData = async () => {
       try {
-        setLoading(true);
         const servicesResponse = await axios.get(`/service/${slug}/service`);
         setServices(servicesResponse.data.data);
 
         const incidentsResponse = await axios.get(`/incident/${slug}/incident`);
         setIncidents(incidentsResponse.data.data);
-
-        setLoading(false);
       } catch (err) {
         setError(err.response?.data?.message || "An error occurred");
-        setLoading(false);
       }
     };
 
@@ -246,4 +294,4 @@ const OrganizationDashboard = () => {
   );
 };
 
-export default OrganizationDashboard;
+export default OrganizationPublicPage;

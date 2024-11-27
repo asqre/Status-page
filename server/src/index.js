@@ -7,6 +7,10 @@ import cors from "cors";
 import serviceRoutes from "./routes/Services.js";
 import incidentRoutes from "./routes/Incidents.js";
 import organizationRoutes from "./routes/Organization.js";
+import { Server } from "socket.io";
+import http from "http";
+import Service from "./models/Services.js";
+import Incident from "./models/Incidents.js";
 
 // configure env
 dotenv.config();
@@ -16,6 +20,56 @@ connectDB();
 
 // rest object
 const app = express();
+
+// web socket config
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+// socket connection handler
+io.on("connection", (socket) => {
+  console.log("New Client connected");
+
+  const serviceChangeStream = Service.watch();
+  serviceChangeStream.on("change", async (change) => {
+    try {
+      if (change.operationType === "insert") {
+        socket.emit("serviceAdded", change.fullDocument);
+      } else if (change.operationType === "update") {
+        const updatedService = await Service.findById(change.documentKey._id);
+        socket.emit("serviceUpdated", updatedService);
+      } else if (change.operationType === "delete") {
+        socket.emit("serviceDeleted", change.documentKey._id);
+      }
+    } catch (error) {
+      console.error("Error in service change stream:", error);
+    }
+  });
+
+  const incidentChangeStream = Incident.watch();
+  incidentChangeStream.on("change", async (change) => {
+    try {
+      if (change.operationType === "insert") {
+        socket.emit("incidentAdded", change.fullDocument);
+      } else if (change.operationType === "update") {
+        const updatedIncident = await Incident.findById(change.documentKey._id);
+        socket.emit("incidentUpdated", updatedIncident);
+      } else if (change.operationType === "delete") {
+        socket.emit("incidentDeleted", change.documentKey._id);
+      }
+    } catch (error) {
+      console.error("Error in incident change stream:", error);
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 // middlewares
 app.use(cors());
@@ -38,8 +92,8 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 8080;
 
 //run listen
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(
-    `server Running on ${process.env.DEV_MODE} at ${PORT}`.bgCyan.white
+    `Server running on ${process.env.DEV_MODE} at ${PORT}`.bgCyan.white
   );
 });
