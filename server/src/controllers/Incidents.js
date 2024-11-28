@@ -4,7 +4,8 @@ import organizationModel from "../models/Organization.js";
 
 export const createIncident = async (req, res) => {
   try {
-    const { name, organization_id } = req.body;
+    const { name, organization_id, ...incidentData } = req.body;
+    console.log(req.body);
 
     if (!organization_id) {
       return res.status(400).send({
@@ -20,7 +21,15 @@ export const createIncident = async (req, res) => {
       });
     }
 
-    const incident = new incidentModel({ ...req.body });
+    if (incidentData._id) {
+      delete incidentData._id;
+    }
+
+    const incident = new incidentModel({
+      name,
+      organization_id,
+      ...incidentData,
+    });
 
     const savedIncident = await incident.save();
 
