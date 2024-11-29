@@ -32,13 +32,11 @@ const SignInPage = () => {
                 />
               </div>
               <h2 className="text-3xl font-bold mb-4 text-foreground">
-                Let's Sign In
+                Welcome Back!
               </h2>
 
               <p className="text-muted-foreground text-center">
-                Statuspage helps you communicate with your users during
-                incidents. To get started, you will add the services you care
-                about, customize your page, invite your team.
+                Manage your organization's status page effortlessly.
               </p>
             </div>
           </div>
