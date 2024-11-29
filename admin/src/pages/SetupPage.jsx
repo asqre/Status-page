@@ -311,7 +311,7 @@ const SetUpPage = () => {
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
                         Your status page will be available at:
-                        {import.meta.env.VITE_BASE_URL}/
+                        {import.meta.env.VITE_BASE_URL}/organization/
                         {organizationDetails.subdomain}
                       </p>
                     </div>

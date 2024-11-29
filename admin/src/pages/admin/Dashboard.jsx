@@ -1,9 +1,8 @@
 import Layout from "@/components/layout/Layout";
 import React from "react";
-import { useUser } from "@clerk/clerk-react";
 
 const Dashboard = () => {
-  const user = useUser();
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   return (
     <Layout>
@@ -20,7 +19,7 @@ const Dashboard = () => {
               Dashboard
             </h1>
             <p className="text-lg mb-6 font-bold text-purple-800 capitalize">
-              Hello {user && user.user?.fullName}!
+              Hello {user?.userName}!
             </p>
             <p>
               {" "}

@@ -19,7 +19,6 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-// Menu items.
 const items = [
   {
     title: "Dashboard",
@@ -49,13 +48,14 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { organizationDetails } = useSelector((state) => state.organizations);
+  const organizationDetails = JSON.parse(
+    sessionStorage.getItem("organization")
+  );
   const location = useLocation();
 
   return (
     <Sidebar>
       <SidebarContent>
-        {/* Organization Header */}
         <div className="flex items-center p-4 border-b border-gray-700">
           <div className="flex items-center gap-2">
             <div className="bg-primary w-10 h-10 rounded-full flex items-center justify-center">
@@ -69,7 +69,6 @@ export function AppSidebar() {
           </div>
         </div>
 
-        {/* Menu Items */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -96,7 +95,6 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* Footer */}
       <div className="absolute bottom-0 w-full p-4 text-center text-xs border-t border-gray-700">
         <span>&copy; {new Date().getFullYear()} Organization</span>
       </div>
