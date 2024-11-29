@@ -15,6 +15,9 @@ import {
 } from "./redux/organizations/organizationSlice";
 import OrganizationPublicPage from "./pages/OrganizationPublicPage";
 import LoadingOverlay from "./components/common/LoadingOverlay";
+import StatusLandingPage from "./pages/StatusLandingPage";
+import SignInPage from "./pages/SignInPage";
+import SetUpPage from "./pages/SetupPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -39,12 +42,14 @@ export default function App() {
   return (
     <header>
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route
           path="/organization/:slug"
           element={<OrganizationPublicPage />}
         />
+        <Route path="/" element={<StatusLandingPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/setup" element={<SetUpPage />} />
       </Routes>
 
       <SignedIn>

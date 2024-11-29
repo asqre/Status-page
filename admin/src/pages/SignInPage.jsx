@@ -1,0 +1,133 @@
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Logo from "@/components/common/Logo";
+import { useNavigate } from "react-router-dom";
+
+const SignInPage = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center m-auto py-10">
+      <div className="flex flex-col items-center justify-center max-w-7xl h-full">
+        <Logo />
+
+        <div className="flex flex-col lg:flex-row justify-between">
+          <div className="w-full lg:w-1/2 bg-secondary/10 flex flex-col justify-center items-center p-12">
+            <div className="max-w-md text-center">
+              <div className="mb-8 flex justify-center">
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/006/912/004/non_2x/secure-login-and-sign-up-concept-illustration-vector.jpg"
+                  alt="Status Page Illustration"
+                  width={300}
+                  height={300}
+                  className="rounded-lg shadow-lg"
+                />
+              </div>
+              <h2 className="text-3xl font-bold mb-4 text-foreground">
+                Let's Sign In
+              </h2>
+
+              <p className="text-muted-foreground text-center">
+                Statuspage helps you communicate with your users during
+                incidents. To get started, you will add the services you care
+                about, customize your page, invite your team.
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full flex justify-center lg:w-1/2 lg:p-12">
+            <Card className="w-full max-w-md">
+              <CardHeader>
+                <CardTitle className="text-2xl">
+                  Sign In to StatusPage
+                </CardTitle>
+                <CardDescription>
+                  Manage your service status and keep users informed
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-4">
+                  <div>
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      required
+                    />
+                  </div>
+
+                  {/* <div className="text-right">
+                    <Button variant="link" size="sm" className="text-sm">
+                      Forgot Password?
+                    </Button>
+                  </div> */}
+
+                  <Button type="submit" className="w-full">
+                    Sign In
+                  </Button>
+
+                  <div className="flex items-center my-4">
+                    <div className="flex-grow border-t border-muted-foreground/30"></div>
+                    <span className="mx-4 text-muted-foreground text-sm">
+                      or
+                    </span>
+                    <div className="flex-grow border-t border-muted-foreground/30"></div>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center"
+                  >
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+                      alt="Google Logo"
+                      width={24}
+                      height={24}
+                      className="mr-2"
+                    />
+                    Sign in with Google
+                  </Button>
+
+                  <div className="text-center mt-4">
+                    <span className="text-muted-foreground text-sm">
+                      Don't have an account?{" "}
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="text-primary"
+                        onClick={() => navigate("/setup")}
+                      >
+                        Sign Up
+                      </Button>
+                    </span>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignInPage;
