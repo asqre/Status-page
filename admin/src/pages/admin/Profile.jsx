@@ -1,12 +1,29 @@
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ProfilePage = () => {
-  const { user } = useUser();
-  const { organizationDetails } = useSelector((state) => state.organizations);
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
+  const navigate = useNavigate();
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  const organizationDetails = JSON.parse(
+    sessionStorage.getItem("organization")
+  );
+
+  const handleLogout = async () => {
+    if (isSignedIn) {
+      await signOut();
+    } else {
+      navigate("/");
+    }
+    sessionStorage.clear();
+    toast.success("logged out successfully");
+  };
 
   return (
     <Layout>
@@ -23,9 +40,7 @@ const ProfilePage = () => {
               <h1 className="text-2xl font-semibold text-gray-700">
                 My Profile
               </h1>
-              <SignOutButton>
-                <Button onClick={() => sessionStorage.clear()}>Logout</Button>
-              </SignOutButton>
+              <Button onClick={handleLogout}>Logout</Button>
             </div>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -35,7 +50,7 @@ const ProfilePage = () => {
                 </label>
 
                 <p className="mt-1 text-gray-700 capitalize">
-                  {user?.fullName}
+                  {user?.userName}
                 </p>
               </div>
 
@@ -43,9 +58,7 @@ const ProfilePage = () => {
                 <label className="block text-sm font-medium text-gray-400">
                   Email Address
                 </label>
-                <p className="mt-1 text-gray-700">
-                  {user?.primaryEmailAddress.emailAddress}
-                </p>
+                <p className="mt-1 text-gray-700">{user?.userEmail}</p>
               </div>
 
               <div>
@@ -56,6 +69,14 @@ const ProfilePage = () => {
                 <p className="mt-1 text-gray-700">
                   {organizationDetails?.companyName}
                 </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400">
+                  Role
+                </label>
+
+                <p className="mt-1 text-gray-700">{user?.role}</p>
               </div>
             </div>
           </div>
