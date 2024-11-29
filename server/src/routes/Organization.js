@@ -8,11 +8,13 @@ import {
   deleteOrganization,
   addOrganizationMember,
   fetchAllMembers,
+  userLogin,
 } from "../controllers/Organization.js";
 
 const router = express.Router();
 
-router.get("/check/user", checkUserOrganization);
+router.post("/user/login", userLogin);
+router.get("/user/check", checkUserOrganization);
 router.post("/", createOrganization);
 router.get("/", getAllOrganizations);
 router.get("/:id", getOrganizationById);

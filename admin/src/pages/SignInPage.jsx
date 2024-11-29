@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,9 +11,82 @@ import {
 } from "@/components/ui/card";
 import Logo from "@/components/common/Logo";
 import { useNavigate } from "react-router-dom";
+import { SignInButton, useClerk, useUser } from "@clerk/clerk-react";
+import axios from "@/api/axios";
+import { toast } from "sonner";
 
 const SignInPage = () => {
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setLoginData({ ...loginData, [e.target.id]: e.target.value });
+  };
+
+  const handleSignIn = async () => {
+    const promise = axios.post(`/organization/user/login`, {
+      userEmail: loginData.email,
+      password: loginData.password,
+    });
+
+    toast.promise(promise, {
+      loading: "Checking user credentials...",
+      success: (response) => {
+        const hasOrganization = response.data?.isMember;
+        if (hasOrganization) {
+          navigate("/dashboard");
+        } else {
+          return response.data?.message;
+        }
+        return "Sign in successful!";
+      },
+      error: (error) => {
+        return (
+          error.response?.data?.message || error.message || "Sign in failed"
+        );
+      },
+    });
+  };
+
+  const checkUserOrganization = async () => {
+    if (!user?.primaryEmailAddress?.emailAddress) return;
+
+    const promise = axios.get("/organization/user/check", {
+      params: { userEmail: user.primaryEmailAddress.emailAddress },
+    });
+
+    toast.promise(promise, {
+      loading: "Checking user credentials...",
+      success: async (response) => {
+        const hasOrganization = response.data?.isMember;
+        if (hasOrganization) {
+          navigate("/dashboard");
+          return "Sign in successful!";
+        } else {
+          await signOut();
+          return "No organization found. Signed out.";
+        }
+      },
+      error: async (error) => {
+        await signOut();
+        return (
+          error.response?.data?.message || error.message || "Sign in failed."
+        );
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      checkUserOrganization();
+    }
+  }, [user]);
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center m-auto py-10">
       <div className="flex flex-col items-center justify-center max-w-7xl h-full">
@@ -52,7 +125,7 @@ const SignInPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="space-y-4">
+                <div className="space-y-4">
                   <div>
                     <Label htmlFor="email">Email Address</Label>
                     <Input
@@ -60,6 +133,8 @@ const SignInPage = () => {
                       type="email"
                       placeholder="Enter your email"
                       required
+                      value={loginData.email}
+                      onChange={handleChange}
                     />
                   </div>
 
@@ -70,6 +145,8 @@ const SignInPage = () => {
                       type="password"
                       placeholder="Enter your password"
                       required
+                      value={loginData.password}
+                      onChange={handleChange}
                     />
                   </div>
 
@@ -79,7 +156,11 @@ const SignInPage = () => {
                     </Button>
                   </div> */}
 
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    onClick={handleSignIn}
+                  >
                     Sign In
                   </Button>
 
@@ -91,19 +172,21 @@ const SignInPage = () => {
                     <div className="flex-grow border-t border-muted-foreground/30"></div>
                   </div>
 
-                  <Button
-                    variant="outline"
-                    className="w-full flex items-center justify-center"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
-                      alt="Google Logo"
-                      width={24}
-                      height={24}
-                      className="mr-2"
-                    />
-                    Sign in with Google
-                  </Button>
+                  <SignInButton mode="modal">
+                    <Button
+                      variant="outline"
+                      className="w-full flex items-center justify-center"
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+                        alt="Google Logo"
+                        width={24}
+                        height={24}
+                        className="mr-2"
+                      />
+                      Sign in with Google
+                    </Button>
+                  </SignInButton>
 
                   <div className="text-center mt-4">
                     <span className="text-muted-foreground text-sm">
@@ -118,7 +201,7 @@ const SignInPage = () => {
                       </Button>
                     </span>
                   </div>
-                </form>
+                </div>
               </CardContent>
             </Card>
           </div>

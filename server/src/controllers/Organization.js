@@ -1,6 +1,72 @@
 import organizationModal from "../models/Organization.js";
 import userModel from "../models/Users.js";
 import { UserRoles } from "../data/Enums.js";
+import bcrypt from "bcrypt";
+
+export const userLogin = async (req, res) => {
+  const { userEmail, password } = req.body;
+
+  if (!userEmail || !password) {
+    return res.status(400).send({
+      success: false,
+      message: "Email and password are required",
+    });
+  }
+
+  const user = await userModel.findOne({ userEmail });
+
+  if (!user) {
+    return res.status(401).send({
+      success: false,
+      message: "Invalid email",
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return res.status(401).send({
+      success: false,
+      message: "Invalid password",
+    });
+  }
+
+  const organization = await organizationModal.findById(user.organization_id);
+
+  const responseData = {
+    success: true,
+    message: "Login successful",
+    user: {
+      id: user._id,
+      userName: user.userName,
+      userEmail: user.userEmail,
+      role: user.role,
+    },
+    isMember: !!organization,
+    organization: organization
+      ? {
+          id: organization._id,
+          companyName: organization.companyName,
+          slug: organization.slug,
+        }
+      : null,
+  };
+
+  const token = jwt.sign(
+    {
+      userId: user._id,
+      userEmail: user.userEmail,
+      role: user.role,
+    },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "24h" }
+  );
+
+  res.status(200).send({
+    ...responseData,
+    token,
+  });
+};
 
 export const checkUserOrganization = async (req, res) => {
   try {
@@ -21,6 +87,7 @@ export const checkUserOrganization = async (req, res) => {
         message: "Organization check successful",
         isMember: false,
         organization: null,
+        user: null,
       });
     }
 
@@ -37,6 +104,12 @@ export const checkUserOrganization = async (req, res) => {
             slug: organization.slug,
           }
         : null,
+      user: {
+        id: user._id,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        role: user.role,
+      },
     });
   } catch (error) {
     res.status(500).send({
