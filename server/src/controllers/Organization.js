@@ -59,11 +59,19 @@ export const userSignup = async (req, res) => {
       {
         userId: user._id,
         userEmail: user.userEmail,
+        userName: user.userName,
         role: UserRoles.OWNER,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "24h" }
     );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
+    });
 
     res.status(201).send({
       success: true,
@@ -138,6 +146,7 @@ export const userLogin = async (req, res) => {
     {
       userId: user._id,
       userEmail: user.userEmail,
+      userName: user.userName,
       role: user.role,
     },
     process.env.JWT_SECRET_KEY,
@@ -175,6 +184,18 @@ export const checkUserOrganization = async (req, res) => {
 
     const organization = await organizationModal.findById(user.organization_id);
 
+    const token = JWT.sign(
+      {
+        userId: user._id,
+        userEmail: user.userEmail,
+        userName: user.userName,
+        role: user.role,
+        organizationId: organization._id,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "24h" }
+    );
+
     res.status(200).send({
       success: true,
       message: "Organization check successful",
@@ -192,6 +213,7 @@ export const checkUserOrganization = async (req, res) => {
         userEmail: user.userEmail,
         role: user.role,
       },
+      token,
     });
   } catch (error) {
     res.status(500).send({
@@ -268,6 +290,7 @@ export const createOrganization = async (req, res) => {
       {
         userId: user._id,
         userEmail: user.userEmail,
+        userName: user.userName,
         role: UserRoles.OWNER,
         organizationId: savedOrganization._id,
       },
@@ -467,7 +490,7 @@ export const addOrganizationMember = async (req, res) => {
   } catch (error) {
     console.error("Error adding organization member:", error);
     res.status(500).send({
-      success: fasle,
+      success: false,
       message: "Internal server error",
       error: error.message,
     });

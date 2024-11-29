@@ -17,16 +17,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CheckCircle } from "lucide-react";
-import {
-  SignedIn,
-  SignedOut,
-  SignUpButton,
-  useUser,
-  useClerk,
-} from "@clerk/clerk-react";
+import { SignUpButton, useUser, useClerk } from "@clerk/clerk-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "@/api/axios";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const SetUpPage = () => {
   const [userSignedUp, setUserSignedUp] = useState(false);
@@ -34,6 +29,7 @@ const SetUpPage = () => {
   const { signOut } = useClerk();
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -222,11 +218,14 @@ const SetUpPage = () => {
       toast.promise(promise, {
         loading: "please wait...",
         success: (response) => {
+          navigate(`/dashboard`);
           return response.data?.message;
         },
         error: (error) => {
           return (
-            error.response?.data?.message || error.message || "Sign in failed"
+            error.response?.data?.message ||
+            error.message ||
+            "Failed to create organization"
           );
         },
       });

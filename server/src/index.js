@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import serviceRoutes from "./routes/Services.js";
 import incidentRoutes from "./routes/Incidents.js";
 import organizationRoutes from "./routes/Organization.js";
@@ -75,6 +76,7 @@ io.on("connection", (socket) => {
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 // routes
 app.use("/api/v1/service", serviceRoutes);
