@@ -5,6 +5,9 @@ import { useUser } from "@clerk/clerk-react";
 const Dashboard = () => {
   const user = useUser();
 
+  console.log("user");
+  
+
   return (
     <Layout>
       <div className="container mx-auto p-6">
@@ -20,7 +23,7 @@ const Dashboard = () => {
               Dashboard
             </h1>
             <p className="text-lg mb-6 font-bold text-purple-800 capitalize">
-              Hello {user && user.user.fullName}!
+              Hello {user && user.user?.fullName}!
             </p>
             <p>
               {" "}
