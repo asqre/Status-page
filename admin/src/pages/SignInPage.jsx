@@ -70,6 +70,11 @@ const SignInPage = () => {
       success: async (response) => {
         const hasOrganization = response.data?.isMember;
         if (hasOrganization) {
+          sessionStorage.setItem("user", JSON.stringify(response.data.user));
+          sessionStorage.setItem(
+            "organization",
+            JSON.stringify(response.data.organization)
+          );
           navigate("/dashboard");
           return "Sign in successful!";
         } else {

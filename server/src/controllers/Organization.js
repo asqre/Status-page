@@ -203,6 +203,13 @@ export const checkUserOrganization = async (req, res) => {
       { expiresIn: "24h" }
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
+    });
+
     res.status(200).send({
       success: true,
       message: "Organization check successful",
