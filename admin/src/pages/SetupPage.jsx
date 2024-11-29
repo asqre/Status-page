@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,16 +27,7 @@ const SetUpPage = () => {
   const [userSignedUp, setUserSignedUp] = useState(false);
   const { isSignedIn, user } = useUser();
   const { signOut } = useClerk();
-  const [userEmail, setUserEmail] = useState("");
-  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      setUserEmail(user?.primaryEmailAddress?.emailAddress);
-      setUserName(user?.fullName);
-    }
-  }, [user]);
 
   const SignUpContent = () => {
     const [userData, setUserData] = useState({
@@ -62,8 +53,7 @@ const SetUpPage = () => {
         loading: "please wait...",
         success: (response) => {
           setUserSignedUp(true);
-          setUserEmail(userData.email);
-          setUserName(userData.name);
+          sessionStorage.setItem("user", JSON.stringify(response.data.user));
           return response.data?.message;
         },
         error: (error) => {
@@ -205,19 +195,25 @@ const SetUpPage = () => {
       }
     };
 
-    const handleCreateOrganization = (e) => {
+    const handleCreateOrganization = async (e) => {
       e.preventDefault();
+
+      const userInfo = JSON.parse(sessionStorage.getItem("user"));
 
       const promise = axios.post(`/organization/`, {
         companyName: organizationDetails.orgName,
         slug: organizationDetails.subdomain,
-        userEmail: userEmail,
-        userName: userName,
+        userEmail: user
+          ? user?.primaryEmailAddress?.emailAddress
+          : userInfo?.userEmail,
+        userName: user ? user?.fullName : userInfo?.userName,
       });
 
       toast.promise(promise, {
         loading: "please wait...",
         success: (response) => {
+          const organization = response.data.data;
+          sessionStorage.setItem("organization", JSON.stringify(organization));
           navigate(`/dashboard`);
           return response.data?.message;
         },

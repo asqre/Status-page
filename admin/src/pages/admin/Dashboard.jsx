@@ -5,9 +5,6 @@ import { useUser } from "@clerk/clerk-react";
 const Dashboard = () => {
   const user = useUser();
 
-  console.log("user");
-  
-
   return (
     <Layout>
       <div className="container mx-auto p-6">

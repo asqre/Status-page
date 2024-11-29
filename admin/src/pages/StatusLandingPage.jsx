@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -23,9 +23,23 @@ import {
 } from "@/components/ui/dialog";
 import Logo from "@/components/common/Logo";
 import { useNavigate } from "react-router-dom";
+import { useClerk, useUser } from "@clerk/clerk-react";
 
 const StatusPageLanding = () => {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const { signOut } = useClerk();
+
+  useEffect(() => {
+    const handleSignOut = async () => {
+      if (user) {
+        await signOut({ redirectUrl: "/" });
+      }
+    };
+
+    handleSignOut();
+  }, [user, signOut]);
+
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   const demoOrganizations = [

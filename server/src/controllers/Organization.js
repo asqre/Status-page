@@ -80,6 +80,7 @@ export const userSignup = async (req, res) => {
         id: user._id,
         userName: user.userName,
         userEmail: user.userEmail,
+        role: user.role,
       },
       token,
     });
@@ -153,9 +154,15 @@ export const userLogin = async (req, res) => {
     { expiresIn: "24h" }
   );
 
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 3600000,
+  });
+
   res.status(200).send({
     ...responseData,
-    token,
   });
 };
 
@@ -305,7 +312,7 @@ export const createOrganization = async (req, res) => {
         companyName: savedOrganization.companyName,
         slug: savedOrganization.slug,
         id: savedOrganization._id,
-        userEmail: user.userEmail,
+        // userEmail: user.userEmail,
       },
       token,
     });
