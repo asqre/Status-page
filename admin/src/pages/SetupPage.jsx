@@ -50,7 +50,7 @@ const SetUpPage = () => {
             <p className="text-muted-foreground mb-6">
               Sign up to create your status page
             </p>
-            <SignUpButton mode="modal">
+            <SignUpButton mode="modal" signInForceRedirectUrl="/setup">
               <Button size="lg">Sign Up</Button>
             </SignUpButton>
           </div>

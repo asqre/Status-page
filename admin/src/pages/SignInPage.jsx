@@ -68,12 +68,16 @@ const SignInPage = () => {
           navigate("/dashboard");
           return "Sign in successful!";
         } else {
-          await signOut();
+          await signOut({
+            redirectUrl: "/signin",
+          });
           return "No organization found. Signed out.";
         }
       },
       error: async (error) => {
-        await signOut();
+        await signOut({
+          redirectUrl: "/signin",
+        });
         return (
           error.response?.data?.message || error.message || "Sign in failed."
         );
