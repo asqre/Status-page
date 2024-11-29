@@ -105,7 +105,6 @@ const SignInPage = () => {
                   alt="Status Page Illustration"
                   width={300}
                   height={300}
-                  className="rounded-lg shadow-lg"
                 />
               </div>
               <h2 className="text-3xl font-bold mb-4 text-foreground">

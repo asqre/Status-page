@@ -9,11 +9,13 @@ import {
   addOrganizationMember,
   fetchAllMembers,
   userLogin,
+  userSignup,
 } from "../controllers/Organization.js";
 
 const router = express.Router();
 
 router.post("/user/login", userLogin);
+router.post("/user/signup", userSignup);
 router.get("/user/check", checkUserOrganization);
 router.post("/", createOrganization);
 router.get("/", getAllOrganizations);

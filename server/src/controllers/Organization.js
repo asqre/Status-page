@@ -2,6 +2,88 @@ import organizationModal from "../models/Organization.js";
 import userModel from "../models/Users.js";
 import { UserRoles } from "../data/Enums.js";
 import bcrypt from "bcrypt";
+import JWT from "jsonwebtoken";
+
+export const userSignup = async (req, res) => {
+  try {
+    const { userName, userEmail, password } = req.body;
+
+    if (!userName || !userEmail || !password) {
+      return res.status(400).send({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    if (!/\S+@\S+\.\S+/.test(userEmail)) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid email format",
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).send({
+        success: false,
+        message: "Password should be at least 6 characters long",
+      });
+    }
+
+    const existingUser = await userModel.findOne({ userEmail });
+    if (existingUser && existingUser.organization_id) {
+      return res.status(409).send({
+        success: false,
+        message: "User with this email already exists",
+      });
+    }
+
+    let user;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    if (existingUser) {
+      existingUser.password = hashedPassword;
+      user = existingUser;
+    } else {
+      user = new userModel({
+        userName: userName,
+        userEmail: userEmail,
+        role: UserRoles.OWNER,
+        password: hashedPassword,
+      });
+    }
+
+    await user.save();
+
+    const token = JWT.sign(
+      {
+        userId: user._id,
+        userEmail: user.userEmail,
+        role: UserRoles.OWNER,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "24h" }
+    );
+
+    res.status(201).send({
+      success: true,
+      message: "User registered successfully",
+      user: {
+        id: user._id,
+        userName: user.userName,
+        userEmail: user.userEmail,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).send({
+      success: false,
+      message: "Error during signup",
+      error: error.message,
+    });
+  }
+};
 
 export const userLogin = async (req, res) => {
   const { userEmail, password } = req.body;
@@ -52,7 +134,7 @@ export const userLogin = async (req, res) => {
       : null,
   };
 
-  const token = jwt.sign(
+  const token = JWT.sign(
     {
       userId: user._id,
       userEmail: user.userEmail,
@@ -140,7 +222,7 @@ export const createOrganization = async (req, res) => {
     }
 
     const existingUser = await userModel.findOne({ userEmail });
-    if (existingUser) {
+    if (existingUser && existingUser.organization_id) {
       return res.status(409).send({
         success: false,
         message: "User already a part of other organization",
@@ -155,12 +237,21 @@ export const createOrganization = async (req, res) => {
       });
     }
 
-    const user = new userModel({
-      userName: userName,
-      userEmail: userEmail,
-      role: UserRoles.OWNER,
-      password: process.env.DEFAULT_PASSWORD,
-    });
+    let user;
+    if (existingUser) {
+      user = existingUser;
+    } else {
+      const saltRounds = 10;
+      const randomPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(randomPassword, saltRounds);
+
+      user = new userModel({
+        userName: userName,
+        userEmail: userEmail,
+        role: UserRoles.OWNER,
+        password: hashedPassword,
+      });
+    }
 
     const organization = new organizationModal({
       companyName,
@@ -173,6 +264,17 @@ export const createOrganization = async (req, res) => {
     user.organization_id = savedOrganization._id;
     await user.save();
 
+    const token = JWT.sign(
+      {
+        userId: user._id,
+        userEmail: user.userEmail,
+        role: UserRoles.OWNER,
+        organizationId: savedOrganization._id,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "24h" }
+    );
+
     res.status(201).send({
       success: true,
       message: "Organization created successfully",
@@ -180,7 +282,9 @@ export const createOrganization = async (req, res) => {
         companyName: savedOrganization.companyName,
         slug: savedOrganization.slug,
         id: savedOrganization._id,
+        userEmail: user.userEmail,
       },
+      token,
     });
   } catch (error) {
     if (error.code === 11000) {
