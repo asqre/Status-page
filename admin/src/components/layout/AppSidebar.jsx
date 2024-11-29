@@ -1,23 +1,15 @@
-import {
-  Calendar,
-  Home,
-  UserRound,
-  Settings,
-  Component,
-  InfoIcon,
-} from "lucide-react";
+import { Home, UserRound, Settings, Component, InfoIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { UserButton } from "@clerk/clerk-react";
 
 const items = [
   {
@@ -95,6 +87,15 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      <div className="absolute bottom-16 flex items-center justify-center w-full p-4 ">
+        <UserButton
+          appearance={{
+            elements: {
+              userButtonAvatarBox: "w-10 h-10",
+            },
+          }}
+        />
+      </div>
       <div className="absolute bottom-0 w-full p-4 text-center text-xs border-t border-gray-700">
         <span>&copy; {new Date().getFullYear()} Organization</span>
       </div>
