@@ -75,22 +75,60 @@ A simplified status page application designed to manage service statuses, incide
 
 ### **Prerequisites**
 - Node.js installed (v14 or above).
+- Yarn package manager installed.
 - A Clerk.js account for authentication setup.
 
-### **Steps**
+### **Steps to Run Locally**
 1. **Clone the Repository**  
    ```bash
    git clone <repository_url>
    cd <repository_folder>
    ```
-2. **Install Dependencies**  
+
+2. **Update Environment Variables**  
+   Update the `.env` files in both the `admin` and `server` folders as shown below:
+
+   #### **`.env` (admin)**
+   ```env
+   VITE_CLERK_PUBLISHABLE_KEY=pk_test_dGhvcm91Z2gtbWFzdGlmZi0yMi5jbGVyay5hY2NvdW50cy5kZXYk
+   VITE_API_URL=http://localhost:8000
+   VITE_BASE_URL=http://localhost:5173
+   ```
+
+   #### **`.env` (server)**
+   ```env
+   PORT=8000
+   DEV_MODE=development
+   MONGO_URL=mongodb+srv://paymentintergration:xeLUekwEq4pUr7rJ@statuspagedb.e1wsf.mongodb.net/
+   DEFAULT_PASSWORD=12345678
+   HOST_URL=http://localhost:5173
+   JWT_SECRET_KEY=sldfjskdjwioejwlkejskl
+   NODE_ENV=production
+   ```
+
+   ⚠️ **Important**: If these variables are not updated, you will encounter CORS origin errors, and the API requests will fail due to security restrictions.
+
+3. **Install Dependencies**  
+   Navigate to the root folder and install dependencies:
    ```bash
    npm install
    ```
-3. **Run Development Server**  
+
+4. **Run the Application**  
+   Navigate to the `server` folder and run the server and frontend together:
    ```bash
-   npm start
+   cd server/
+   yarn admin
    ```
+
+   This will simultaneously start:
+   - Backend server on `http://localhost:8000`
+   - Frontend on `http://localhost:5173`
+
+5. **Access the Application**  
+   - Admin Panel: `http://localhost:5173`
+   - Public Status Page: `http://localhost:5173/organization/companyName`
+
 ---
 
 ## **Demo and Deployment**
