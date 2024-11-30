@@ -25,7 +25,7 @@ router.get("/user/check", checkUserOrganization);
 router.post("/", createOrganization);
 
 // Protected routes
-router.get("/", authenticateToken, authorizeUser, getAllOrganizations);
+router.get("/", getAllOrganizations);
 router.get("/:id", authenticateToken, authorizeUser, getOrganizationById);
 router.put("/:id", authenticateToken, authorizeUser, updateOrganization);
 router.delete("/:id", authenticateToken, authorizeUser, deleteOrganization);

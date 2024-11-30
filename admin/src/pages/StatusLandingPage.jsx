@@ -24,11 +24,15 @@ import {
 import Logo from "@/components/common/Logo";
 import { useNavigate } from "react-router-dom";
 import { useClerk, useUser } from "@clerk/clerk-react";
+import { toast } from "sonner";
+import axios from "@/api/axios";
 
 const StatusPageLanding = () => {
   const navigate = useNavigate();
   const { user } = useUser();
   const { signOut } = useClerk();
+  const [demoOrganizations, setDemoOrganizations] = useState([]);
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   useEffect(() => {
     const handleSignOut = async () => {
@@ -40,18 +44,18 @@ const StatusPageLanding = () => {
     handleSignOut();
   }, [user, signOut]);
 
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const fetchAllOrganizations = async () => {
+    try {
+      const res = await axios.get("/organization");
+      setDemoOrganizations(res.data.data);
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
 
-  const demoOrganizations = [
-    {
-      name: "Tech Startup Inc",
-      publicUrl: "https://tech-startup.statuspage.com",
-    },
-    {
-      name: "E-commerce Platform",
-      publicUrl: "https://ecommerce-platform.statuspage.com",
-    },
-  ];
+  useEffect(() => {
+    fetchAllOrganizations();
+  }, []);
 
   const features = [
     {
@@ -209,14 +213,14 @@ const StatusPageLanding = () => {
               <Card key={index}>
                 <CardContent className="flex justify-between items-center p-4">
                   <div>
-                    <h3 className="font-semibold">{org.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {org.publicUrl}
-                    </p>
+                    <h3 className="font-semibold">{org?.companyName}</h3>
+                    <p className="text-sm text-muted-foreground">{org?.slug}</p>
                   </div>
                   <Button
                     variant="outline"
-                    onClick={() => window.open(org.publicUrl, "_blank")}
+                    onClick={() =>
+                      window.open(`/organization/${org?.slug}`, "_blank")
+                    }
                   >
                     View Status Page
                   </Button>

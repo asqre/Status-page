@@ -348,7 +348,8 @@ export const createOrganization = async (req, res) => {
 
 export const getAllOrganizations = async (req, res) => {
   try {
-    const organizations = await organizationModal.find();
+    // Fetch only `companyName` and `slug` fields from the database
+    const organizations = await organizationModal.find({}, "companyName slug");
     res.status(200).send({
       success: true,
       message: "Organizations fetched successfully",
