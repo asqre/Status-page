@@ -74,15 +74,15 @@ io.on("connection", (socket) => {
 });
 
 // middlewares
-app.use(express.json());
-app.use(morgan("dev"));
-app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.HOST_URL,
     credentials: true,
   })
 );
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(cookieParser());
 
 // routes
 app.use("/api/v1/service", serviceRoutes);
