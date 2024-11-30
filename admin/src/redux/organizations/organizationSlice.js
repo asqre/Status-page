@@ -25,6 +25,7 @@ export const addMember = createAsyncThunk(
         ...memberData,
         organization_id,
       });
+      dispatch(resetMemberData());
       return response.data.member;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);

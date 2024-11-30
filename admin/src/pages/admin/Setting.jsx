@@ -23,8 +23,12 @@ import Layout from "@/components/layout/Layout";
 
 const Setting = () => {
   const [copied, setCopied] = useState(false);
-  const { organizationDetails, memberData, members, isLoading, error } =
-    useSelector((state) => state.organizations);
+  const organizationDetails = JSON.parse(
+    sessionStorage.getItem("organization")
+  );
+  const { memberData, members, isLoading, error } = useSelector(
+    (state) => state.organizations
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,7 +39,6 @@ const Setting = () => {
     e.preventDefault();
     try {
       dispatch(addMember(memberData));
-      dispatch(resetMemberData());
     } catch (error) {
       console.error("Failed to add member:", error);
     }
