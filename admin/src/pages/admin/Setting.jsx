@@ -103,19 +103,20 @@ const Setting = () => {
             <CardContent>
               <form onSubmit={handleAddMember} className="space-y-4">
                 <Input
-                  id="userEmail"
-                  type="email"
-                  placeholder="Member Email"
-                  value={memberData.userEmail}
-                  onChange={handleChange}
-                  required
-                  className="border-gray-300 focus:border-blue-500"
-                />
-                <Input
                   id="userName"
                   type="text"
                   placeholder="Member Name"
                   value={memberData.userName}
+                  onChange={handleChange}
+                  required
+                  className="border-gray-300 focus:border-blue-500"
+                />
+
+                <Input
+                  id="userEmail"
+                  type="email"
+                  placeholder="Member Email"
+                  value={memberData.userEmail}
                   onChange={handleChange}
                   required
                   className="border-gray-300 focus:border-blue-500"

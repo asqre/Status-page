@@ -1,6 +1,7 @@
 import axios from "@/api/axios";
 import { getUserData } from "@/utils.js/authUtils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 export const fetchMembers = createAsyncThunk(
   "organizations/fetchMembers",
@@ -12,6 +13,7 @@ export const fetchMembers = createAsyncThunk(
       );
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -27,8 +29,12 @@ export const addMember = createAsyncThunk(
         organization_id: organization.id,
         userId: user.id,
       });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.member;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
