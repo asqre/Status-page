@@ -1,43 +1,38 @@
 import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const StatusChip = ({ status, activeStatus, onStatusSelect }) => {
   const isActive = activeStatus && activeStatus.name === status.name;
 
-  const colorClasses = {
-    green: {
-      bg: "bg-[#22c55E]",
-      text: "text-white font-bold",
-    },
-    purple: {
-      bg: "bg-[#9333EA]",
-      text: "text-white font-bold",
-    },
-    yellow: {
-      bg: "bg-[#D97706]",
-      text: "text-white font-bold",
-    },
-    red: {
-      bg: "bg-[#DC2626]",
-      text: "text-white font-bold",
-    },
-    blue: {
-      bg: "bg-[#2563EB]",
-      text: "text-white font-bold",
-    },
+  const colorVariants = {
+    green: "bg-green-500 hover:bg-green-600",
+    purple: "bg-purple-500 hover:bg-purple-600",
+    yellow: "bg-amber-500 hover:bg-amber-600",
+    red: "bg-red-500 hover:bg-red-600",
+    blue: "bg-blue-500 hover:bg-blue-600",
   };
 
-  const classes = isActive
-    ? colorClasses[status.color] || {}
-    : { bg: "bg-white", text: "text-gray-500", border: "border-gray-300" };
+  const getVariantClasses = () => {
+    if (isActive) {
+      return colorVariants[status.color] || "bg-gray-500";
+    }
+    return "bg-gray-100 text-gray-700 hover:bg-gray-200";
+  };
 
   return (
-    <div
-      className={`flex items-center gap-2 p-2 rounded-md cursor-pointer border text-sm transition-colors ${classes.bg} ${classes.text} hover:opacity-85`}
+    <Badge
+      variant={isActive ? "default" : "secondary"}
+      className={cn(
+        "cursor-pointer flex items-center gap-2 py-1 px-3 rounded-md",
+        getVariantClasses(),
+        "hover:opacity-90 transition-all"
+      )}
       onClick={() => onStatusSelect(status)}
     >
-      <status.icon className={`w-5 h-5 ${classes.text}`} />
-      <span>{status.name}</span>
-    </div>
+      <status.icon className="w-4 h-4 mr-1" />
+      {status.name}
+    </Badge>
   );
 };
 

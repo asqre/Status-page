@@ -1,16 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "@/api/axios";
+import { getUserData } from "@/utils.js/authUtils";
+import { toast } from "sonner";
 
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { organization } = getUserData();
       const response = await axios.get(
-        `/service/?organization_id=${organization_id}`
+        `/service/?organization_id=${organization.id}`
       );
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -18,15 +21,20 @@ export const fetchServices = createAsyncThunk(
 
 export const addService = createAsyncThunk(
   "services/addService",
-  async (serviceData, { rejectWithValue, getState }) => {
+  async (serviceData, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { user, organization } = getUserData();
       const response = await axios.post("/service", {
         ...serviceData,
-        organization_id,
+        organization_id: organization.id,
+        userId: user.id,
       });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -36,9 +44,17 @@ export const updateService = createAsyncThunk(
   "services/updateService",
   async ({ id, serviceData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/service/${id}`, serviceData);
+      const { user } = getUserData();
+      const response = await axios.put(`/service/${id}`, {
+        ...serviceData,
+        userId: user.id,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -48,9 +64,16 @@ export const deleteService = createAsyncThunk(
   "services/deleteService",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`/service/${id}`);
+      const { user } = getUserData();
+      const response = await axios.delete(`/service/${id}`, {
+        params: { userId: user.id },
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return id;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -95,7 +118,7 @@ const serviceSlice = createSlice({
     });
     builder.addCase(fetchServices.rejected, (state, action) => {
       state.isLoading = false;
-      // state.error = action.payload;
+      state.error = action.payload;
     });
 
     // Add service

@@ -7,14 +7,18 @@ import {
   deleteService,
   getServicesByOrganizationSlug,
 } from "../controllers/Services.js";
+import {
+  authenticateToken,
+  authorizeUser,
+} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createService);
+router.post("/", authenticateToken, authorizeUser, createService);
 router.get("/", getAllServices);
-router.get("/:id", getServiceById);
-router.put("/:id", updateService);
-router.delete("/:id", deleteService);
-router.get('/:slug/service', getServicesByOrganizationSlug);
+router.get("/:id", authenticateToken, authorizeUser, getServiceById);
+router.put("/:id", authenticateToken, authorizeUser, updateService);
+router.delete("/:id", authenticateToken, authorizeUser, deleteService);
+router.get("/:slug/service", getServicesByOrganizationSlug);
 
 export default router;

@@ -23,7 +23,8 @@ export const authenticateToken = async (req, res, next) => {
         });
       }
 
-      if (req.body.userId !== decoded.userId) {
+      const userId = req.body.userId || req.params.userId;
+      if (userId !== decoded.userId) {
         return res.status(403).send({
           success: false,
           message: "Unauthorized Access",

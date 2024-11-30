@@ -1,10 +1,11 @@
 import { incidentStatus } from "@/data";
 import React, { useState } from "react";
-import TextArea from "../common/TextArea";
 import StatusChips from "../common/StatusChip";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { addTimelineEntry } from "@/redux/incidents/incidentSlice";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 const RecordUpdate = ({ incident, onClose }) => {
   const dispatch = useDispatch();
@@ -43,37 +44,30 @@ const RecordUpdate = ({ incident, onClose }) => {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col space-y-[8px]">
-        <TextArea
-          label="Message"
-          placeholder="Type here"
-          id="message"
-          notRequired="true"
-          value={newTimeLine.message}
-          onChange={onInputChange}
-        />
+        <div>
+          <Label htmlFor="message">Message</Label>
+          <Textarea
+            id="message"
+            placeholder="Type here"
+            value={newTimeLine.message}
+            onChange={onInputChange}
+          />
+        </div>
 
-        <label
-          htmlFor="label"
-          className="required-input"
-          style={{
-            fontFamily: "Noto Sans",
-            fontWeight: 600,
-            color: "#666666",
-            fontSize: "12px",
-            lineHeight: "18px",
-          }}
-        >
-          Status
-        </label>
-        <div className="flex flex-wrap gap-5">
-          {incidentStatus.map((status, index) => (
-            <StatusChips
-              key={index}
-              status={status}
-              activeStatus={currentStatus}
-              onStatusSelect={handleStatusSelect}
-            />
-          ))}
+        <div>
+          <Label htmlFor="status" className="required-input">
+            Status
+          </Label>
+          <div className="flex flex-wrap gap-5">
+            {incidentStatus.map((status, index) => (
+              <StatusChips
+                key={index}
+                status={status}
+                activeStatus={currentStatus}
+                onStatusSelect={handleStatusSelect}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

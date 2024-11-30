@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import InputField from "../common/InputField";
 import StatusChips from "../common/StatusChip";
 import { serviceStatus } from "@/data";
-import TextArea from "../common/TextArea";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +9,10 @@ import {
   setSeviceData,
   updateService,
 } from "@/redux/services/serviceSlice";
+
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
 
 const ServiceForm = ({ service, onClose }) => {
   const dispatch = useDispatch();
@@ -51,28 +53,24 @@ const ServiceForm = ({ service, onClose }) => {
 
   return (
     <div className="flex flex-col gap-8">
-      <InputField
-        label="Name"
-        placeholder="Type here"
-        id="name"
-        value={serviceData.name}
-        onChange={onInputChange}
-      />
+      <div>
+        <Label htmlFor="name" className="required-input">
+          Name
+        </Label>
+        <Input
+          id="name"
+          type="text"
+          value={serviceData.name}
+          onChange={onInputChange}
+          placeholder="Enter service name"
+          required
+        />
+      </div>
 
       <div className="flex flex-col space-y-[8px]">
-        <label
-          htmlFor="label"
-          className="required-input"
-          style={{
-            fontFamily: "Noto Sans",
-            fontWeight: 600,
-            color: "#666666",
-            fontSize: "12px",
-            lineHeight: "18px",
-          }}
-        >
+        <Label htmlFor="status" className="required-input">
           Status
-        </label>
+        </Label>
         <div className="flex flex-wrap gap-5">
           {serviceStatus.map((status, index) => (
             <StatusChips
@@ -84,15 +82,15 @@ const ServiceForm = ({ service, onClose }) => {
           ))}
         </div>
       </div>
-
-      <TextArea
-        label="Description"
-        placeholder="Type here"
-        id="description"
-        notRequired="true"
-        value={serviceData.description}
-        onChange={onInputChange}
-      />
+      <div>
+        <Label htmlFor="description">Description</Label>
+        <Textarea
+          id="description"
+          placeholder="Type here"
+          value={serviceData.description}
+          onChange={onInputChange}
+        />
+      </div>
 
       <div className="flex justify-end mt-4">
         <Button onClick={handleSubmit}>{service ? "Update" : "Add"}</Button>

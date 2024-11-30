@@ -1,16 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "@/api/axios";
+import { getUserData } from "@/utils.js/authUtils";
+import { toast } from "sonner";
 
 export const fetchIncidents = createAsyncThunk(
   "incidents/fetchIncidents",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { organization } = getUserData();
       const response = await axios.get(
-        `/incident/?organization_id=${organization_id}`
+        `/incident/?organization_id=${organization.id}`
       );
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -18,15 +21,20 @@ export const fetchIncidents = createAsyncThunk(
 
 export const addIncident = createAsyncThunk(
   "incidents/addIncident",
-  async (incidentData, { rejectWithValue, getState }) => {
+  async (incidentData, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { user, organization } = getUserData();
       const response = await axios.post("/incident", {
         ...incidentData,
-        organization_id,
+        organization_id: organization.id,
+        userId: user.id,
       });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -36,9 +44,17 @@ export const updateIncident = createAsyncThunk(
   "incidents/updateIncident",
   async ({ id, incidentData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/incident/${id}`, incidentData);
+      const { user } = getUserData();
+      const response = await axios.put(`/incident/${id}`, {
+        ...incidentData,
+        userId: user.id,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -48,9 +64,16 @@ export const deleteIncident = createAsyncThunk(
   "incidents/deleteIncident",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`/incident/${id}`);
+      const { user } = getUserData();
+      const response = await axios.delete(`/incident/${id}`, {
+        params: { userId: user.id },
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return id;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -60,12 +83,18 @@ export const addTimelineEntry = createAsyncThunk(
   "incidents/addTimelineEntry",
   async ({ id, timelineData }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `/incident/${id}/timeline`,
-        timelineData
-      );
+      const { user } = getUserData();
+      const response = await axios.post(`/incident/${id}/timeline`, {
+        ...timelineData,
+        userId: user.id,
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+      }
       return response.data.data;
     } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
@@ -114,7 +143,7 @@ const incidentSlice = createSlice({
     });
     builder.addCase(fetchIncidents.rejected, (state, action) => {
       state.isLoading = false;
-      // state.error = action.payload;
+      state.error = action.payload;
     });
 
     // Add Incidents

@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import InputField from "../common/InputField";
 import StatusChips from "../common/StatusChip";
 import { incidentStatus } from "@/data";
-import TextArea from "../common/TextArea";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,10 +9,13 @@ import {
   setIncidentData,
   updateIncident,
 } from "@/redux/incidents/incidentSlice";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 const IncidentForm = ({ incident, onClose }) => {
   const dispatch = useDispatch();
-  const { incidentData, isLoading, error } = useSelector(
+  const { incidentData } = useSelector(
     (state) => state.incidents
   );
 
@@ -60,28 +61,24 @@ const IncidentForm = ({ incident, onClose }) => {
 
   return (
     <div className="flex flex-col gap-8">
-      <InputField
-        label="Name"
-        placeholder="Type here"
-        id="name"
-        value={incidentData.name}
-        onChange={onInputChange}
-      />
+      <div>
+        <Label htmlFor="name" className="required-input">
+          Name
+        </Label>
+        <Input
+          id="name"
+          type="text"
+          value={incidentData.name}
+          onChange={onInputChange}
+          placeholder="Enter service name"
+          required
+        />
+      </div>
 
       <div className="flex flex-col space-y-[8px]">
-        <label
-          htmlFor="label"
-          className="required-input"
-          style={{
-            fontFamily: "Noto Sans",
-            fontWeight: 600,
-            color: "#666666",
-            fontSize: "12px",
-            lineHeight: "18px",
-          }}
-        >
+        <Label htmlFor="status" className="required-input">
           Status
-        </label>
+        </Label>
         <div className="flex flex-wrap gap-5">
           {incidentStatus.map((status, index) => (
             <StatusChips
@@ -94,14 +91,15 @@ const IncidentForm = ({ incident, onClose }) => {
         </div>
       </div>
 
-      <TextArea
-        label="Message"
-        placeholder="Type here"
-        id="message"
-        notRequired="true"
-        value={incidentData.message}
-        onChange={onInputChange}
-      />
+      <div>
+        <Label htmlFor="message">Message</Label>
+        <Textarea
+          id="message"
+          placeholder="Type here"
+          value={incidentData.message}
+          onChange={onInputChange}
+        />
+      </div>
 
       <div className="flex justify-end mt-4">
         <Button onClick={handleSubmit}>{incident ? "Update" : "Add"}</Button>
