@@ -123,6 +123,16 @@ const Setting = () => {
                   required
                   className="border-gray-300 focus:border-blue-500"
                 />
+
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="password"
+                  value={memberData.password}
+                  onChange={handleChange}
+                  required
+                  className="border-gray-300 focus:border-blue-500"
+                />
                 <select
                   id="role"
                   value={memberData.role}

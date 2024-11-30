@@ -454,7 +454,17 @@ export const deleteOrganization = async (req, res) => {
 
 export const addOrganizationMember = async (req, res) => {
   try {
-    const { userEmail, userName, role, organization_id } = req.body;
+    const { userEmail, userName, role, organization_id, password } = req.body;
+
+    if (!password || password.length < 6) {
+      return res.status(400).send({
+        success: false,
+        message: "Password should be at least 6 characters long",
+      });
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     let user = await userModel.findOne({ userEmail });
 
@@ -462,7 +472,7 @@ export const addOrganizationMember = async (req, res) => {
       user = new userModel({
         userName,
         userEmail,
-        password: process.env.DEFAULT_PASSWORD,
+        password: hashedPassword,
         role,
         organization_id,
       });
@@ -506,6 +516,7 @@ export const addOrganizationMember = async (req, res) => {
         userName: user.userName,
         userEmail: user.userEmail,
         role: role,
+        password: password,
       },
     });
   } catch (error) {

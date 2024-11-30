@@ -44,6 +44,7 @@ const initialState = {
     userName: "",
     userEmail: "",
     role: "",
+    password: "",
   },
 };
 
