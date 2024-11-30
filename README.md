@@ -87,22 +87,10 @@ A simplified status page application designed to manage service statuses, incide
    ```bash
    npm install
    ```
-3. **Environment Variables**  
-   Create a `.env` file in the root directory with the following keys:
-   ```env
-   DATABASE_URL=<your_database_url>
-   CLERK_API_KEY=<your_clerk_api_key>
-   JWT_SECRET=<your_jwt_secret>
-   ```
-4. **Run Development Server**  
+3. **Run Development Server**  
    ```bash
    npm start
    ```
-
-5. **Access the Application**  
-   - Admin Panel: `http://localhost:3000/admin`
-   - Public Status Page: `http://localhost:3000`
-
 ---
 
 ## **Demo and Deployment**
@@ -117,5 +105,3 @@ A simplified status page application designed to manage service statuses, incide
 - Email notifications for status changes.
 - Metric graphs for uptime analysis.
 - External status check API.
-
---- 
