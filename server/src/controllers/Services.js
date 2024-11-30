@@ -20,6 +20,17 @@ export const createService = async (req, res) => {
       });
     }
 
+    if (req.body._id) {
+      delete req.body._id;
+    }
+
+    if (req.body._id) {
+      return res.status(400).send({
+        success: false,
+        message: "Custom _id is not allowed",
+      });
+    }
+
     const service = new serviceModel({ ...req.body });
 
     const savedService = await service.save();

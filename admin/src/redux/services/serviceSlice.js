@@ -24,11 +24,12 @@ export const addService = createAsyncThunk(
   async (serviceData, { rejectWithValue }) => {
     try {
       const { user, organization } = getUserData();
-      const response = await axios.post("/service", {
-        ...serviceData,
-        organization_id: organization.id,
+      const payload = {
         userId: user.id,
-      });
+        organization_id: organization.id,
+        ...serviceData,
+      };
+      const response = await axios.post("/service", payload);
       if (response.data.success) {
         toast.success(response.data.message);
       }
