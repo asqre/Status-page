@@ -101,8 +101,18 @@ const SetUpPage = () => {
                 <CardContent>
                   <div className="space-y-4">
                     <SignUpButton mode="modal" signInForceRedirectUrl="/setup">
-                      <Button variant="outline" className="w-full">
-                        Sign Up with Clerk
+                      <Button
+                        variant="outline"
+                        className="w-full flex items-center justify-center"
+                      >
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+                          alt="Google Logo"
+                          width={24}
+                          height={24}
+                          className="mr-2"
+                        />
+                        Sign Up with Google
                       </Button>
                     </SignUpButton>
 
