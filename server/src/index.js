@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import serviceRoutes from "./routes/Services.js";
 import incidentRoutes from "./routes/Incidents.js";
 import organizationRoutes from "./routes/Organization.js";
+import authRoutes from "./routes/Auth.js";
 import { Server } from "socket.io";
 import http from "http";
 import Service from "./models/Services.js";
@@ -87,6 +88,7 @@ app.use(
 app.use("/api/v1/service", serviceRoutes);
 app.use("/api/v1/incident", incidentRoutes);
 app.use("/api/v1/organization", organizationRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 //rest api
 app.get("/", (req, res) => {

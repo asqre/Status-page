@@ -1,8 +1,8 @@
+import { logout } from "@/api/auth";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useClerk, useUser } from "@clerk/clerk-react";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -16,13 +16,23 @@ const ProfilePage = () => {
   );
 
   const handleLogout = async () => {
-    if (isSignedIn) {
-      await signOut();
-    } else {
+    try {
+      await logout();
+
+      if (isSignedIn) {
+        await signOut();
+      }
+
+      sessionStorage.clear();
+
       navigate("/");
+
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error(error || error.message || "Failed to log out");
+      return;
     }
-    sessionStorage.clear();
-    toast.success("logged out successfully");
   };
 
   return (
