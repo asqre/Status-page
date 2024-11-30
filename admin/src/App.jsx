@@ -28,6 +28,8 @@ export default function App() {
         <Route path="/settings" element={<Setting />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
+
+      <Route path="*" element={<SignInPage />} />
     </Routes>
   );
 }
