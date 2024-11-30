@@ -15,7 +15,6 @@ import { userRoles } from "@/data";
 import {
   addMember,
   fetchMembers,
-  resetMemberData,
   setMemberData,
 } from "@/redux/organizations/organizationSlice";
 import LoadingOverlay from "@/components/common/LoadingOverlay";

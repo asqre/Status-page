@@ -1,13 +1,14 @@
 import axios from "@/api/axios";
+import { getUserData } from "@/utils.js/authUtils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchMembers = createAsyncThunk(
   "organizations/fetchMembers",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { organization } = getUserData();
       const response = await axios.get(
-        `/organization/get-all-members/${organization_id}`
+        `/organization/get-all-members/${organization.id}`
       );
       return response.data.data;
     } catch (error) {
@@ -18,14 +19,14 @@ export const fetchMembers = createAsyncThunk(
 
 export const addMember = createAsyncThunk(
   "organizations/addMember",
-  async (memberData, { rejectWithValue, getState }) => {
+  async (memberData, { rejectWithValue }) => {
     try {
-      const { organization_id } = getState().organizations;
+      const { user, organization } = getUserData();
       const response = await axios.post("/organization/add-member", {
         ...memberData,
-        organization_id,
+        organization_id: organization.id,
+        userId: user.id,
       });
-      dispatch(resetMemberData());
       return response.data.member;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -62,13 +63,6 @@ const organizationSlice = createSlice({
     setMemberData: (state, action) => {
       state.memberData = { ...state.memberData, ...action.payload };
     },
-    resetMemberData: (state) => {
-      state.memberData = {
-        userName: "",
-        userEmail: "",
-        role: "",
-      };
-    },
   },
 
   extraReducers: (builder) => {
@@ -94,6 +88,12 @@ const organizationSlice = createSlice({
     builder.addCase(addMember.fulfilled, (state, action) => {
       state.isLoading = false;
       state.members.push(action.payload);
+
+      state.memberData = {
+        userName: "",
+        userEmail: "",
+        role: "",
+      };
     });
     builder.addCase(addMember.rejected, (state, action) => {
       state.isLoading = false;
@@ -107,7 +107,6 @@ export const {
   setOrganizationDetails,
   clearOrganizationId,
   setMemberData,
-  resetMemberData,
 } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

@@ -35,11 +35,6 @@ router.post(
   authorizeUser,
   addOrganizationMember
 );
-router.get(
-  "/get-all-members/:organization_id",
-  authenticateToken,
-  authorizeUser,
-  fetchAllMembers
-);
+router.get("/get-all-members/:organization_id", fetchAllMembers);
 
 export default router;
