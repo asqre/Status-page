@@ -147,11 +147,7 @@ const Setting = () => {
                     </option>
                   ))}
                 </select>
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                >
+                <Button type="submit" disabled={isLoading} className="w-full">
                   {isLoading ? "Adding..." : "Add Member"}
                 </Button>
                 <p className="text-red-600 ">{error}</p>
