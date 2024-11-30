@@ -21,13 +21,12 @@ import Chip from "@/components/common/Chip";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteService, fetchServices } from "@/redux/services/serviceSlice";
 import { formatDate } from "@/utils.js";
-import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const Services = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const { services, isLoading, error } = useSelector((state) => state.services);
+  const { services } = useSelector((state) => state.services);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,12 +73,6 @@ const Services = () => {
               Add Services
             </Button>
           </div>
-
-          {error && (
-            <div className="w-[100%] bg-red-200 text-red-500 p-4 rounded-lg mt-4 text-center">
-              <strong>Error:</strong> {error || "An error occurred"}
-            </div>
-          )}
 
           <div className="w-[100%] border rounded-lg shadow-md">
             <Table>
@@ -165,7 +158,6 @@ const Services = () => {
           </Dialog>
         </div>
       </div>
-      <LoadingOverlay isLoading={isLoading} />
     </Layout>
   );
 };

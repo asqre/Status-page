@@ -27,7 +27,6 @@ import { formatDate } from "@/utils.js";
 import { Eye } from "lucide-react";
 import IncidentTimeLine from "@/components/incidents/IncidentTimeLine";
 import RecordUpdate from "@/components/incidents/RecordUpdate";
-import LoadingOverlay from "@/components/common/LoadingOverlay";
 
 const Incidents = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,9 +35,7 @@ const Incidents = () => {
   const [isTimelineDialogOpen, setIsTimelineDialogOpen] = useState(false);
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false);
 
-  const { incidents, isLoading, error } = useSelector(
-    (state) => state.incidents
-  );
+  const { incidents } = useSelector((state) => state.incidents);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -105,12 +102,6 @@ const Incidents = () => {
               Report new Incident
             </Button>
           </div>
-
-          {error && (
-            <div className="w-[100%] bg-red-200 text-red-500 p-4 rounded-lg mt-4 text-center">
-              <strong>Error:</strong> {error || "An error occurred"}
-            </div>
-          )}
 
           <div className="w-[100%] border rounded-lg shadow-md">
             <Table>
@@ -243,7 +234,6 @@ const Incidents = () => {
           </Dialog>
         </div>
       </div>
-      <LoadingOverlay isLoading={isLoading} />
     </Layout>
   );
 };

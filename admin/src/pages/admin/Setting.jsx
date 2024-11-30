@@ -17,7 +17,6 @@ import {
   fetchMembers,
   setMemberData,
 } from "@/redux/organizations/organizationSlice";
-import LoadingOverlay from "@/components/common/LoadingOverlay";
 import Layout from "@/components/layout/Layout";
 
 const Setting = () => {
@@ -25,9 +24,7 @@ const Setting = () => {
   const organizationDetails = JSON.parse(
     sessionStorage.getItem("organization")
   );
-  const { memberData, members, isLoading, error } = useSelector(
-    (state) => state.organizations
-  );
+  const { memberData, members } = useSelector((state) => state.organizations);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -147,10 +144,9 @@ const Setting = () => {
                     </option>
                   ))}
                 </select>
-                <Button type="submit" disabled={isLoading} className="w-full">
-                  {isLoading ? "Adding..." : "Add Member"}
+                <Button type="submit" className="w-full">
+                  "Add Member"
                 </Button>
-                <p className="text-red-600 ">{error}</p>
               </form>
             </CardContent>
           </Card>
@@ -192,7 +188,6 @@ const Setting = () => {
             )}
           </CardContent>
         </Card>
-        <LoadingOverlay isLoading={isLoading} />
       </div>
     </Layout>
   );
