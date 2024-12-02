@@ -76,12 +76,14 @@ io.on("connection", (socket) => {
 // middlewares
 app.use(
   cors({
-    origin: process.env.HOST_URL,
+    // origin: process.env.HOST_URL,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    // allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+// app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
