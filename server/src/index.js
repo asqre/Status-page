@@ -96,6 +96,7 @@ app.use("/api/v1/auth", authRoutes);
 app.get("/", (req, res) => {
   res.status(200).send(`
     <h1>Welcome to Status Page Server</h1>
+    <h1>Welcome to Status Page Server</h1>
   `);
 });
 

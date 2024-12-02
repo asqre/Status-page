@@ -209,7 +209,7 @@ const StatusPageLanding = () => {
           </DialogHeader>
 
           <div className="space-y-4">
-            {demoOrganizations.map((org, index) => (
+            {demoOrganizations?.map((org, index) => (
               <Card key={index}>
                 <CardContent className="flex justify-between items-center p-4">
                   <div>
