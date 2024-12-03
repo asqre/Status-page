@@ -84,31 +84,26 @@ A simplified status page application designed to manage service statuses, incide
 ```bash
 git clone <repository_url>
 ```  
-<kbd>📋</kbd> **Copy**
 
 ```bash
 cd <repository_folder>
 ```  
-<kbd>📋</kbd> **Copy**
 
 #### **2. Install Dependencies**  
 Navigate to the root folder and install dependencies:
 ```bash
 npm install
 ```  
-<kbd>📋</kbd> **Copy**
 
 #### **3. Run the Application**  
 Navigate to the `server` folder and run the server and frontend together:
 ```bash
 cd server/
 ```  
-<kbd>📋</kbd> **Copy**
 
 ```bash
 yarn admin
 ```  
-<kbd>📋</kbd> **Copy**
 
 This will simultaneously start:
 - Backend server on `http://localhost:8000`
