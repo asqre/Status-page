@@ -82,7 +82,6 @@ app.use(
     credentials: true,
   })
 );
-// app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -96,7 +95,6 @@ app.use("/api/v1/auth", authRoutes);
 //rest api
 app.get("/", (req, res) => {
   res.status(200).send(`
-    <h1>Welcome to Status Page Server</h1>
     <h1>Welcome to Status Page Server</h1>
   `);
 });
