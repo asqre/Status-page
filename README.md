@@ -1,7 +1,7 @@
 # **Status Page Application**
 
 ## **Overview**
-A simplified status page application designed to manage service statuses, incidents, and real-time updates. This application provides a seamless experience for administrators to manage services and their statuses, while offering a public-facing page for users to view service updates.
+A simplified status page application designed to manage service statuses, incidents, and real-time updates. This application provides a seamless experience for administrators to manage services and their statuses while offering a public-facing page for users to view service updates.
 
 ---
 
@@ -28,14 +28,14 @@ A simplified status page application designed to manage service statuses, incide
 ### **Public-Facing Features**
 - Dedicated pages for Sign-In, Sign-Up, and Onboarding.
 - Public status page to view the real-time status of services.
-- Access to the demo of public pages displaying all joined organizations.
+- Access to a demo of public pages displaying all joined organizations.
 - Timeline of incidents and status changes.
 
 ### **Enhancements**
 - Backend validation for all fields.
 - UI built with **ShadcnUI** for a clean, consistent design.
 - Role-based access control ensuring secure operations.
-  
+
 ---
 
 ## **Tech Stack**
@@ -79,71 +79,63 @@ A simplified status page application designed to manage service statuses, incide
 - A Clerk.js account for authentication setup.
 
 ### **Steps to Run Locally**
-1. **Clone the Repository**  
-   ```bash
-   git clone <repository_url>
-   cd <repository_folder>
-   ```
 
-2. **Update Environment Variables**  
-   Update the `.env` files in both the `admin` and `server` folders as shown below:
+#### **1. Clone the Repository**
+```bash
+git clone <repository_url>
+```  
+<kbd>📋</kbd> **Copy**
 
-   #### **`.env` (admin)**
-   ```env
-   VITE_CLERK_PUBLISHABLE_KEY=pk_test_dGhvcm91Z2gtbWFzdGlmZi0yMi5jbGVyay5hY2NvdW50cy5kZXYk
-   VITE_API_URL=http://localhost:8000
-   VITE_BASE_URL=http://localhost:5173
-   ```
+```bash
+cd <repository_folder>
+```  
+<kbd>📋</kbd> **Copy**
 
-   #### **`.env` (server)**
-   ```env
-   PORT=8000
-   DEV_MODE=development
-   MONGO_URL=mongodb+srv://paymentintergration:xeLUekwEq4pUr7rJ@statuspagedb.e1wsf.mongodb.net/
-   DEFAULT_PASSWORD=12345678
-   HOST_URL=http://localhost:5173
-   JWT_SECRET_KEY=sldfjskdjwioejwlkejskl
-   NODE_ENV=production
-   ```
+#### **2. Install Dependencies**  
+Navigate to the root folder and install dependencies:
+```bash
+npm install
+```  
+<kbd>📋</kbd> **Copy**
 
-   ⚠️ **Important**: If these variables are not updated, you will encounter CORS origin errors, and the API requests will fail due to security restrictions.
+#### **3. Run the Application**  
+Navigate to the `server` folder and run the server and frontend together:
+```bash
+cd server/
+```  
+<kbd>📋</kbd> **Copy**
 
-3. **Install Dependencies**  
-   Navigate to the root folder and install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+yarn admin
+```  
+<kbd>📋</kbd> **Copy**
 
-4. **Run the Application**  
-   Navigate to the `server` folder and run the server and frontend together:
-   ```bash
-   cd server/
-   yarn admin
-   ```
+This will simultaneously start:
+- Backend server on `http://localhost:8000`
+- Frontend on `http://localhost:5173`
 
-   This will simultaneously start:
-   - Backend server on `http://localhost:8000`
-   - Frontend on `http://localhost:5173`
-
-5. **Access the Application**  
-   - Admin Panel: `http://localhost:5173`
-   - Public Status Page: `http://localhost:5173/organization/companyName`
+#### **4. Access the Application**  
+- Admin Panel: `http://localhost:5173`
+- Public Status Page: `http://localhost:5173/organization/companyName`
 
 ---
 
 ## **Demo and Deployment**
+
+### **Deployment Links**
 - Frontend Live URL: [https://amit-status-page.netlify.app/](https://amit-status-page.netlify.app/)
 - Backend Server: https://statuspage.duckdns.org
-- Server Hosting: AWS EC2 (ap-south-1 region)
-- SSL Security: HTTPS with Let's Encrypt
-- Domain: Configured via DuckDNS
 
-### **Deployment Details**
+### **Hosting Details**
 - **Frontend**: Deployed on Netlify
 - **Backend**: Hosted on AWS EC2 instance
 - **SSL**: Secured with HTTPS protocol
+- **Domain**: Configured via DuckDNS
 
 ### **Access Credentials**  
 - Email: `demo@example.com`  
 - Password: `password123`
 
+⚠️ **Note**: Ensure CORS origins are correctly configured. If not, API requests will fail due to security restrictions.
+
+---
