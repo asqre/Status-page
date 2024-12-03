@@ -132,14 +132,18 @@ A simplified status page application designed to manage service statuses, incide
 ---
 
 ## **Demo and Deployment**
-- Live URL: [https://amit-status-page.netlify.app/](https://amit-status-page.netlify.app/)
-- Demo Credentials:  
-  - Email: `demo@example.com`  
-  - Password: `password123`
+- Frontend Live URL: [https://amit-status-page.netlify.app/](https://amit-status-page.netlify.app/)
+- Backend Server: https://statuspage.duckdns.org
+- Server Hosting: AWS EC2 (ap-south-1 region)
+- SSL Security: HTTPS with Let's Encrypt
+- Domain: Configured via DuckDNS
 
----
+### **Deployment Details**
+- **Frontend**: Deployed on Netlify
+- **Backend**: Hosted on AWS EC2 instance
+- **SSL**: Secured with HTTPS protocol
 
-## **Optional Stretch Features**
-- Email notifications for status changes.
-- Metric graphs for uptime analysis.
-- External status check API.
+### **Access Credentials**  
+- Email: `demo@example.com`  
+- Password: `password123`
+
