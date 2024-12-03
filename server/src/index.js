@@ -28,7 +28,6 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [process.env.HOST_URL, process.env.CLIENT_LOCALHOST_URL],
-    // origin: process.env.HOST_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -77,12 +76,7 @@ io.on("connection", (socket) => {
 // middlewares
 app.use(
   cors({
-    origin: [
-      process.env.HOST_URL,
-      process.env.CLIENT_LOCALHOST_URL,
-      "http://3.89.62.143:8000",
-    ],
-    // origin: "*",
+    origin: [process.env.HOST_URL, process.env.CLIENT_LOCALHOST_URL],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
