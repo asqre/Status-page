@@ -65,22 +65,19 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem
+                <Link
+                  to={item.url}
                   key={item.title}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-all
                     ${
                       location.pathname === item.url
                         ? "bg-primary text-white font-bold"
-                        : "hover:bg-gray-800 text-black"
+                        : "hover:bg-gray-300 text-black"
                     }`}
                 >
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                  <item.icon className="w-5 h-5" />
+                  <span>{item.title}</span>
+                </Link>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
