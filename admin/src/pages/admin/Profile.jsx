@@ -1,39 +1,11 @@
-import { logout } from "@/api/auth";
 import Layout from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { useClerk, useUser } from "@clerk/clerk-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 const ProfilePage = () => {
-  const { isSignedIn } = useUser();
-  const { signOut } = useClerk();
-  const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem("user"));
   const organizationDetails = JSON.parse(
     sessionStorage.getItem("organization")
   );
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-
-      if (isSignedIn) {
-        await signOut();
-      }
-
-      sessionStorage.clear();
-
-      navigate("/");
-
-      toast.success("Logged out successfully");
-    } catch (error) {
-      console.error(error);
-      toast.error(error || error.message || "Failed to log out");
-      return;
-    }
-  };
 
   return (
     <Layout>
@@ -50,7 +22,6 @@ const ProfilePage = () => {
               <h1 className="text-2xl font-semibold text-gray-700">
                 My Profile
               </h1>
-              <Button onClick={handleLogout}>Logout</Button>
             </div>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">

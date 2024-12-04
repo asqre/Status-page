@@ -1,15 +1,23 @@
-import { Home, UserRound, Settings, Component, InfoIcon } from "lucide-react";
+import {
+  Home,
+  UserRound,
+  Settings,
+  Component,
+  InfoIcon,
+  LogOutIcon,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router-dom";
-import { UserButton } from "@clerk/clerk-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useClerk, useUser } from "@clerk/clerk-react";
+import { Button } from "../ui/button";
+import { logout } from "@/api/auth";
+import { toast } from "sonner";
 
 const items = [
   {
@@ -44,6 +52,29 @@ export function AppSidebar() {
     sessionStorage.getItem("organization")
   );
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+      if (isSignedIn) {
+        await signOut();
+      }
+
+      sessionStorage.clear();
+
+      navigate("/");
+
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error(error || error.message || "Failed to log out");
+      return;
+    }
+  };
 
   return (
     <Sidebar>
@@ -84,14 +115,15 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <div className="absolute bottom-16 flex items-center justify-center w-full p-4 ">
-        <UserButton
-          appearance={{
-            elements: {
-              userButtonAvatarBox: "w-10 h-10",
-            },
-          }}
-        />
+      <div className="absolute bottom-16 flex items-center justify-center w-full px-4 ">
+        <Button
+          onClick={handleLogout}
+          variant="destructive"
+          className="w-full flex items-center gap-3 p-3 rounded-lg"
+        >
+          <LogOutIcon className="w-5 h-5" />
+          <span>Logout</span>
+        </Button>
       </div>
       <div className="absolute bottom-0 w-full p-4 text-center text-xs border-t border-gray-700">
         <span>&copy; {new Date().getFullYear()} Organization</span>
