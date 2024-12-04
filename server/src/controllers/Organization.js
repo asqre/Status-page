@@ -66,13 +66,6 @@ export const userSignup = async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      maxAge: 3600000,
-    });
-
     res.status(201).send({
       success: true,
       message: "User registered successfully",
@@ -163,6 +156,7 @@ export const userLogin = async (req, res) => {
 
   res.status(200).send({
     ...responseData,
+    token,
   });
 };
 
@@ -202,13 +196,6 @@ export const checkUserOrganization = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: "24h" }
     );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      maxAge: 3600000,
-    });
 
     res.status(200).send({
       success: true,
@@ -311,13 +298,6 @@ export const createOrganization = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: "24h" }
     );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      maxAge: 3600000,
-    });
 
     res.status(201).send({
       success: true,

@@ -54,6 +54,7 @@ const SetUpPage = () => {
         success: (response) => {
           setUserSignedUp(true);
           sessionStorage.setItem("user", JSON.stringify(response.data.user));
+          sessionStorage.setItem("token", response.data.token);
           return response.data?.message;
         },
         error: (error) => {

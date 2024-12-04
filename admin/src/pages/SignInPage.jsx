@@ -44,6 +44,7 @@ const SignInPage = () => {
             "organization",
             JSON.stringify(response.data.organization)
           );
+          sessionStorage.setItem("token", response.data.token);
           navigate("/dashboard");
         } else {
           return response.data?.message;
@@ -75,6 +76,7 @@ const SignInPage = () => {
             "organization",
             JSON.stringify(response.data.organization)
           );
+          sessionStorage.setItem("token", response.data.token);
           navigate("/dashboard");
           return "Sign in successful!";
         } else {

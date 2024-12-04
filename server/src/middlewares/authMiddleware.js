@@ -2,7 +2,16 @@ import JWT from "jsonwebtoken";
 import { UserRoles } from "../data/Enums.js";
 
 export const authenticateToken = async (req, res, next) => {
-  const token = req.cookies.token;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(403).send({
+      success: false,
+      message: "No token provided or invalid token format",
+    });
+  }
+
+  const token = authHeader.split(" ")[1];
 
   if (!token) {
     return res.status(403).send({
